@@ -2,6 +2,43 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Film, Tv, Radio, Sparkles, Heart, Trophy, Check, Smartphone, Laptop, Monitor, Tv2, Cast, Zap } from "lucide-react";
 import logo from "@/assets/ultraview-logo.jpg";
 
+import moviePanico from "@/assets/posters/movie-panico.jpg";
+import movieComoMagica from "@/assets/posters/movie-como-magica.png";
+import movieDevoradores from "@/assets/posters/movie-devoradores.webp";
+import movieAvatar from "@/assets/posters/movie-avatar.jpg";
+import movieMario from "@/assets/posters/movie-mario.jpeg";
+import movieDestruicao from "@/assets/posters/movie-destruicao.jpeg";
+import moviePrada from "@/assets/posters/movie-prada.webp";
+import movieMaquina from "@/assets/posters/movie-maquina.jpg";
+import movieSilentHill from "@/assets/posters/movie-silenthill.jpeg";
+import movieZootopia from "@/assets/posters/movie-zootopia.jpg";
+
+import serieGreys from "@/assets/posters/serie-greys.jpeg";
+import serieLaCasa from "@/assets/posters/serie-lacasa.jpeg";
+import serieGot from "@/assets/posters/serie-got.jpeg";
+import serieTwd from "@/assets/posters/serie-twd.jpg";
+import serieOrigem from "@/assets/posters/serie-origem.jpg";
+import serieSupernatural from "@/assets/posters/serie-supernatural.jpg";
+import serieDemolidor from "@/assets/posters/serie-demolidor.jpeg";
+import serieTheBoys from "@/assets/posters/serie-theboys.png";
+import serieImpuros from "@/assets/posters/serie-impuros.jpeg";
+
+import animeSoloLeveling from "@/assets/posters/anime-sololeveling.webp";
+import animeDragonBall from "@/assets/posters/anime-dragonball.jpg";
+import animeNaruto from "@/assets/posters/anime-naruto.jpg";
+import animeNanatsu from "@/assets/posters/anime-nanatsu.jpg";
+import animeOnePunch from "@/assets/posters/anime-onepunch.jpg";
+import animeJujutsu from "@/assets/posters/anime-jujutsu.jpg";
+import animeOnePiece from "@/assets/posters/anime-onepiece.jpeg";
+
+import doramaClasse from "@/assets/posters/dorama-classe.jpeg";
+import doramaAmor from "@/assets/posters/dorama-amor.webp";
+import doramaTirano from "@/assets/posters/dorama-tirano.jpeg";
+import doramaBeijo from "@/assets/posters/dorama-beijo.jpeg";
+import doramaSorriso from "@/assets/posters/dorama-sorriso.jpeg";
+import doramaMafia from "@/assets/posters/dorama-mafia.jpg";
+import doramaSangue from "@/assets/posters/dorama-sangue.jpg";
+
 export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
@@ -40,32 +77,71 @@ const plans = [
   { name: "Anual", price: "R$ 350", period: "/ano", badge: "Ganhe 3 meses grátis", features: ["3 meses extras grátis", "Melhor custo-benefício", "Suporte 100% humanizado"], cta: "Assinar Agora" },
 ];
 
-const posters = {
-  filmes: ["Lançamento Épico", "Ação Total", "Aventura Cósmica", "Drama Premiado", "Comédia Imperdível", "Suspense Sombrio", "Terror Arrepiante", "Animação Familiar", "Ficção Científica", "Romance Clássico"],
-  series: ["Saga Médica", "Heist Mundial", "Reinos em Guerra", "Apocalipse Zumbi", "Mistério Mental", "Sobrenatural", "Heróis Urbanos", "Anti-heróis", "Crime Brasileiro"],
-  animes: ["Caçador Solitário", "Lendas Z", "Ninja Mestre", "Pecados Capitais", "Soco Definitivo", "Feitiço Maldito", "Pirata Rei"],
-  doramas: ["Classe Heroica", "Amor Fingido", "Chef Tirano", "Beijo Surpresa", "Sorriso Real", "Rei do Crime", "Sangue & Amor"],
+type Poster = { title: string; img: string };
+
+const posters: Record<string, Poster[]> = {
+  filmes: [
+    { title: "Pânico 7", img: moviePanico },
+    { title: "Como Mágica", img: movieComoMagica },
+    { title: "Devoradores de Estrelas", img: movieDevoradores },
+    { title: "Avatar: Fire and Ash", img: movieAvatar },
+    { title: "Super Mario Galaxy", img: movieMario },
+    { title: "Destruição Final 2", img: movieDestruicao },
+    { title: "O Diabo Veste Prada 2", img: moviePrada },
+    { title: "Máquina de Guerra", img: movieMaquina },
+    { title: "Terror em Silent Hill", img: movieSilentHill },
+    { title: "Zootopia 2", img: movieZootopia },
+  ],
+  series: [
+    { title: "Grey's Anatomy", img: serieGreys },
+    { title: "La Casa de Papel", img: serieLaCasa },
+    { title: "Game of Thrones", img: serieGot },
+    { title: "The Walking Dead", img: serieTwd },
+    { title: "Origem", img: serieOrigem },
+    { title: "Supernatural", img: serieSupernatural },
+    { title: "Demolidor", img: serieDemolidor },
+    { title: "The Boys", img: serieTheBoys },
+    { title: "Impuros", img: serieImpuros },
+  ],
+  animes: [
+    { title: "Solo Leveling", img: animeSoloLeveling },
+    { title: "Dragon Ball Super", img: animeDragonBall },
+    { title: "Naruto Shippuden", img: animeNaruto },
+    { title: "Nanatsu no Taizai", img: animeNanatsu },
+    { title: "One Punch Man", img: animeOnePunch },
+    { title: "Jujutsu Kaisen", img: animeJujutsu },
+    { title: "One Piece", img: animeOnePiece },
+  ],
+  doramas: [
+    { title: "Classe dos Heróis Fracos", img: doramaClasse },
+    { title: "Amor de Mentirinha", img: doramaAmor },
+    { title: "O Chef do Tirano", img: doramaTirano },
+    { title: "Beijo Explosivo", img: doramaBeijo },
+    { title: "Sorriso Real", img: doramaSorriso },
+    { title: "O Rei da Máfia", img: doramaMafia },
+    { title: "Sangue Fresco e Amor Antigo", img: doramaSangue },
+  ],
 };
 
-function PosterCard({ title }: { title: string }) {
+function PosterCard({ item }: { item: Poster }) {
   return (
-    <div className="relative shrink-0 w-32 sm:w-40 aspect-[2/3] rounded-lg overflow-hidden border border-purple-400/30 bg-gradient-to-br from-purple-900 via-fuchsia-900 to-indigo-950 shadow-[0_0_20px_rgba(168,85,247,0.3)] group hover:scale-105 transition-transform">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(236,72,153,0.4),transparent_60%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(139,92,246,0.5),transparent_60%)]" />
+    <div className="relative shrink-0 w-32 sm:w-40 aspect-[2/3] rounded-lg overflow-hidden border border-purple-400/30 shadow-[0_0_20px_rgba(168,85,247,0.3)] group hover:scale-105 hover:shadow-[0_0_30px_rgba(217,70,239,0.6)] transition-all">
+      <img src={item.img} alt={item.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
       <div className="absolute inset-0 flex items-end p-3">
-        <h4 className="text-white font-bold text-sm leading-tight drop-shadow-lg">{title}</h4>
+        <h4 className="text-white font-bold text-sm leading-tight drop-shadow-lg">{item.title}</h4>
       </div>
       <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-fuchsia-400 animate-pulse" />
     </div>
   );
 }
 
-function PosterRow({ title, items }: { title: string; items: string[] }) {
+function PosterRow({ title, items }: { title: string; items: Poster[] }) {
   return (
     <div className="space-y-4">
       <h3 className="text-xl sm:text-2xl font-bold text-white px-4">{title}</h3>
       <div className="flex gap-3 sm:gap-4 overflow-x-auto px-4 pb-4 scrollbar-thin scrollbar-thumb-purple-500/50">
-        {[...items, ...items].map((t, i) => <PosterCard key={i} title={t} />)}
+        {[...items, ...items].map((t, i) => <PosterCard key={i} item={t} />)}
       </div>
     </div>
   );
