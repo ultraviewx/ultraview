@@ -2,6 +2,43 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Film, Tv, Radio, Sparkles, Heart, Trophy, Check, Smartphone, Laptop, Monitor, Tv2, Cast, Zap } from "lucide-react";
 import logo from "@/assets/ultraview-logo.jpg";
 
+import moviePanico from "@/assets/posters/movie-panico.jpg";
+import movieComoMagica from "@/assets/posters/movie-como-magica.png";
+import movieDevoradores from "@/assets/posters/movie-devoradores.webp";
+import movieAvatar from "@/assets/posters/movie-avatar.jpg";
+import movieMario from "@/assets/posters/movie-mario.jpeg";
+import movieDestruicao from "@/assets/posters/movie-destruicao.jpeg";
+import moviePrada from "@/assets/posters/movie-prada.webp";
+import movieMaquina from "@/assets/posters/movie-maquina.jpg";
+import movieSilentHill from "@/assets/posters/movie-silenthill.jpeg";
+import movieZootopia from "@/assets/posters/movie-zootopia.jpg";
+
+import serieGreys from "@/assets/posters/serie-greys.jpeg";
+import serieLaCasa from "@/assets/posters/serie-lacasa.jpeg";
+import serieGot from "@/assets/posters/serie-got.jpeg";
+import serieTwd from "@/assets/posters/serie-twd.jpg";
+import serieOrigem from "@/assets/posters/serie-origem.jpg";
+import serieSupernatural from "@/assets/posters/serie-supernatural.jpg";
+import serieDemolidor from "@/assets/posters/serie-demolidor.jpeg";
+import serieTheBoys from "@/assets/posters/serie-theboys.png";
+import serieImpuros from "@/assets/posters/serie-impuros.jpeg";
+
+import animeSoloLeveling from "@/assets/posters/anime-sololeveling.webp";
+import animeDragonBall from "@/assets/posters/anime-dragonball.jpg";
+import animeNaruto from "@/assets/posters/anime-naruto.jpg";
+import animeNanatsu from "@/assets/posters/anime-nanatsu.jpg";
+import animeOnePunch from "@/assets/posters/anime-onepunch.jpg";
+import animeJujutsu from "@/assets/posters/anime-jujutsu.jpg";
+import animeOnePiece from "@/assets/posters/anime-onepiece.jpeg";
+
+import doramaClasse from "@/assets/posters/dorama-classe.jpeg";
+import doramaAmor from "@/assets/posters/dorama-amor.webp";
+import doramaTirano from "@/assets/posters/dorama-tirano.jpeg";
+import doramaBeijo from "@/assets/posters/dorama-beijo.jpeg";
+import doramaSorriso from "@/assets/posters/dorama-sorriso.jpeg";
+import doramaMafia from "@/assets/posters/dorama-mafia.jpg";
+import doramaSangue from "@/assets/posters/dorama-sangue.jpg";
+
 export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
