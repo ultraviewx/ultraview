@@ -72,14 +72,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Ultra View" },
+      { name: "description", content: "Create custom landing pages with your branding, galaxy themes, and personalized content layouts." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Ultra View" },
+      { property: "og:description", content: "Create custom landing pages with your branding, galaxy themes, and personalized content layouts." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Ultra View" },
+      { name: "twitter:description", content: "Create custom landing pages with your branding, galaxy themes, and personalized content layouts." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/REIWjIBTI1Un59w1mUo4jGOP8E22/social-images/social-1779788612340-photo_2026-05-26_11-32-06.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/REIWjIBTI1Un59w1mUo4jGOP8E22/social-images/social-1779788612340-photo_2026-05-26_11-32-06.webp" },
     ],
     links: [
       {
