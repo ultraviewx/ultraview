@@ -1,6 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Film, Tv, Radio, Sparkles, Heart, Trophy, Check, Smartphone, Laptop, Monitor, Tv2, Cast, Zap } from "lucide-react";
+import { Check, Zap } from "lucide-react";
 import logo from "@/assets/ultraview-logo.jpg";
+
+import bannerHero from "@/assets/banners/banner-hero.jpg";
+import bannerFilmes from "@/assets/banners/banner-filmes.jpg";
+import bannerSeries from "@/assets/banners/banner-series.jpg";
+import bannerAnimes from "@/assets/banners/banner-animes.jpg";
+import bannerDoramas from "@/assets/banners/banner-doramas.jpg";
+import bannerAoVivo from "@/assets/banners/banner-aovivo.jpg";
 
 import moviePanico from "@/assets/posters/movie-panico.jpg";
 import movieComoMagica from "@/assets/posters/movie-como-magica.png";
@@ -49,32 +56,38 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-const categories = [
-  { icon: Film, title: "FILMES", desc: "Mais de 30 mil filmes em alta qualidade" },
-  { icon: Tv, title: "SÉRIES", desc: "Mais de 15 mil séries completas" },
-  { icon: Radio, title: "TV AO VIVO", desc: "Mais de 1500 canais ao vivo, 24h por dia" },
-  { icon: Sparkles, title: "ANIMES", desc: "Mais de 2000 animes legendados e dublados" },
-  { icon: Heart, title: "DORAMAS", desc: "Mais de 3000 doramas asiáticos imperdíveis" },
-  { icon: Trophy, title: "ESPORTES", desc: "Todos os campeonatos disponíveis" },
+const WHATSAPP_NUMBER = "5585991173080";
+const waLink = (msg: string) =>
+  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+
+// Streaming logos via simple-icons CDN (CC0). Color tinted for galaxy theme.
+const streamings = [
+  { name: "Netflix", slug: "netflix", color: "E50914" },
+  { name: "Disney+", slug: "disneyplus", color: "0E47BA" },
+  { name: "Prime Video", slug: "primevideo", color: "00A8E1" },
+  { name: "Globoplay", slug: "globo", color: "FF3333" },
+  { name: "Paramount+", slug: "paramountplus", color: "0064FF" },
+  { name: "HBO Max", slug: "hbo", color: "B026FF" },
+  { name: "Apple TV+", slug: "appletv", color: "FFFFFF" },
+  { name: "Star+", slug: "staehler", color: "FFD400" },
 ];
 
-const streamings = ["Netflix", "Disney+", "Prime Video", "Globoplay", "Paramount+", "HBO Max", "Apple TV+", "Star+"];
-
+// Device illustrations using emoji-rich SVG style isn't ideal; use simple-icons for brand devices.
 const devices = [
-  { icon: Tv2, name: "Smart TV", desc: "Compatível com Samsung, LG e Android TV" },
-  { icon: Monitor, name: "TV Box", desc: "Funciona em qualquer TV Box Android" },
-  { icon: Zap, name: "Fire Stick", desc: "Amazon Fire TV Stick compatível" },
-  { icon: Cast, name: "Mi Stick", desc: "Xiaomi Mi TV Stick compatível" },
-  { icon: Laptop, name: "Notebook", desc: "Use no seu notebook em qualquer lugar" },
-  { icon: Smartphone, name: "Celular", desc: "Android e iOS — leve no bolso" },
+  { name: "Smart TV", desc: "Samsung, LG, Android TV", slug: "lg", fallback: "📺" },
+  { name: "TV Box", desc: "Qualquer TV Box Android", slug: "android", fallback: "📦" },
+  { name: "Fire Stick", desc: "Amazon Fire TV Stick", slug: "amazonfiretv", fallback: "🔥" },
+  { name: "Mi Stick", desc: "Xiaomi Mi TV Stick", slug: "xiaomi", fallback: "🟠" },
+  { name: "Notebook", desc: "Windows, Mac e Linux", slug: "apple", fallback: "💻" },
+  { name: "Celular", desc: "Android e iOS", slug: "apple", fallback: "📱" },
 ];
 
 const plans = [
-  { name: "Teste Grátis", price: "R$ 0", period: "", badge: null, features: ["Acesso completo", "Sem cartão", "Sem compromisso", "Suporte 100% humanizado"], cta: "Começar Teste" },
-  { name: "Mensal", price: "R$ 35", period: "/mês", badge: null, features: ["Todo o catálogo", "Multiplataforma", "Suporte 100% humanizado"], cta: "Assinar Agora" },
-  { name: "Trimestral", price: "R$ 95", period: "/3 meses", badge: "Ganhe 1 mês grátis", features: ["1 mês extra grátis", "Economia garantida", "Suporte 100% humanizado"], cta: "Assinar Agora" },
-  { name: "Semestral", price: "R$ 180", period: "/6 meses", badge: null, features: ["Preço reduzido", "Sem reajuste", "Suporte 100% humanizado"], cta: "Assinar Agora" },
-  { name: "Anual", price: "R$ 350", period: "/ano", badge: "Ganhe 3 meses grátis", features: ["3 meses extras grátis", "Melhor custo-benefício", "Suporte 100% humanizado"], cta: "Assinar Agora" },
+  { name: "Teste Grátis", price: "R$ 0", period: "", badge: "Sem cartão", highlight: false, features: ["Acesso completo", "Sem cartão de crédito", "Sem compromisso", "Suporte humanizado"], cta: "Quero o teste grátis" },
+  { name: "Mensal", price: "R$ 35", period: "/mês", badge: null, highlight: false, features: ["Todo o catálogo", "Multiplataforma", "Suporte humanizado"], cta: "Assinar Mensal" },
+  { name: "Trimestral", price: "R$ 95", period: "/3 meses", badge: "Ganhe 1 mês grátis", highlight: true, features: ["1 mês extra grátis", "Economia garantida", "Suporte humanizado"], cta: "Assinar Trimestral" },
+  { name: "Semestral", price: "R$ 180", period: "/6 meses", badge: null, highlight: false, features: ["Preço reduzido", "Sem reajuste", "Suporte humanizado"], cta: "Assinar Semestral" },
+  { name: "Anual", price: "R$ 350", period: "/ano", badge: "Ganhe 3 meses grátis", highlight: true, features: ["3 meses extras grátis", "Melhor custo-benefício", "Suporte humanizado"], cta: "Assinar Anual" },
 ];
 
 type Poster = { title: string; img: string };
@@ -136,124 +149,196 @@ function PosterCard({ item }: { item: Poster }) {
   );
 }
 
-function PosterRow({ title, items }: { title: string; items: Poster[] }) {
+function CategoryBanner({ title, subtitle, badge, banner }: { title: string; subtitle: string; badge: string; banner: string }) {
+  return (
+    <div className="relative rounded-2xl overflow-hidden border border-purple-400/30 shadow-[0_0_40px_rgba(168,85,247,0.25)] group">
+      <img src={banner} alt={title} loading="lazy" className="w-full h-40 sm:h-52 object-cover group-hover:scale-105 transition-transform duration-700" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#0a0118]/95 via-[#1e1b4b]/60 to-transparent" />
+      <div className="absolute inset-0 flex flex-col justify-center p-6 sm:p-8 max-w-2xl">
+        <span className="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-fuchsia-300 mb-2">{badge}</span>
+        <h3 className="text-2xl sm:text-4xl font-extrabold text-white drop-shadow-lg">{title}</h3>
+        <p className="text-purple-100/90 text-sm sm:text-base mt-1 max-w-md">{subtitle}</p>
+      </div>
+    </div>
+  );
+}
+
+function PosterRow({ title, subtitle, badge, banner, items }: { title: string; subtitle: string; badge: string; banner: string; items: Poster[] }) {
   return (
     <div className="space-y-4">
-      <h3 className="text-xl sm:text-2xl font-bold text-white px-4">{title}</h3>
-      <div className="flex gap-3 sm:gap-4 overflow-x-auto px-4 pb-4 scrollbar-thin scrollbar-thumb-purple-500/50">
+      <CategoryBanner title={title} subtitle={subtitle} badge={badge} banner={banner} />
+      <div className="flex gap-3 sm:gap-4 overflow-x-auto px-1 pb-4 scrollbar-thin scrollbar-thumb-purple-500/50">
         {[...items, ...items].map((t, i) => <PosterCard key={i} item={t} />)}
       </div>
     </div>
   );
 }
 
+function StreamingLogo({ s }: { s: { name: string; slug: string; color: string } }) {
+  return (
+    <div className="group relative aspect-video flex items-center justify-center rounded-xl bg-gradient-to-br from-purple-800/40 to-indigo-900/60 border border-purple-400/20 backdrop-blur-sm hover:border-fuchsia-400/60 hover:scale-105 transition-all overflow-hidden">
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
+           style={{ background: `radial-gradient(circle at center, #${s.color}33 0%, transparent 70%)` }} />
+      <img
+        src={`https://cdn.simpleicons.org/${s.slug}/ffffff`}
+        alt={s.name}
+        loading="lazy"
+        className="relative h-8 sm:h-10 w-auto max-w-[60%] object-contain opacity-90 group-hover:opacity-100 drop-shadow-[0_0_8px_rgba(217,70,239,0.6)]"
+        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+      />
+      <span className="absolute bottom-2 text-[10px] uppercase tracking-wider text-purple-100/70 font-bold">{s.name}</span>
+    </div>
+  );
+}
+
+function DeviceCard({ d }: { d: { name: string; desc: string; slug: string; fallback: string } }) {
+  return (
+    <div className="p-6 rounded-2xl bg-gradient-to-br from-purple-900/40 to-indigo-950/60 border border-purple-400/20 text-center backdrop-blur-sm hover:border-fuchsia-400/60 hover:-translate-y-1 transition-all group">
+      <div className="relative w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-xl bg-gradient-to-br from-fuchsia-600/20 to-purple-700/20 border border-fuchsia-400/30 shadow-[0_0_20px_rgba(217,70,239,0.3)] group-hover:shadow-[0_0_30px_rgba(217,70,239,0.6)]">
+        <img
+          src={`https://cdn.simpleicons.org/${d.slug}/ffffff`}
+          alt={d.name}
+          loading="lazy"
+          className="w-8 h-8 object-contain"
+          onError={(e) => {
+            const el = e.currentTarget as HTMLImageElement;
+            el.outerHTML = `<span class="text-3xl">${d.fallback}</span>`;
+          }}
+        />
+      </div>
+      <h3 className="font-bold text-lg mb-1 text-white">{d.name}</h3>
+      <p className="text-sm text-purple-200/80">{d.desc}</p>
+    </div>
+  );
+}
+
 function Index() {
+  const trialMsg = "Olá, gostaria de fazer o teste gratuito da Ultra View";
   return (
     <div className="min-h-screen text-white relative overflow-hidden" style={{
       background: "radial-gradient(ellipse at top, #4c1d95 0%, #1e1b4b 35%, #0a0118 70%, #000000 100%)",
     }}>
-      {/* Galaxy stars background */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute inset-0 opacity-60" style={{
-          backgroundImage: `radial-gradient(2px 2px at 20% 30%, white, transparent),
-                            radial-gradient(1px 1px at 60% 70%, white, transparent),
-                            radial-gradient(1.5px 1.5px at 80% 10%, #e9d5ff, transparent),
-                            radial-gradient(1px 1px at 33% 80%, white, transparent),
-                            radial-gradient(2px 2px at 90% 50%, #f0abfc, transparent),
-                            radial-gradient(1px 1px at 10% 60%, white, transparent),
-                            radial-gradient(1.5px 1.5px at 50% 15%, white, transparent),
-                            radial-gradient(1px 1px at 75% 85%, #c084fc, transparent),
-                            radial-gradient(1px 1px at 5% 40%, white, transparent),
-                            radial-gradient(2px 2px at 45% 55%, white, transparent)`,
-          backgroundSize: "100% 100%",
+      {/* Animated 3D Galaxy Background */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        {/* Star layers */}
+        <div className="galaxy-stars galaxy-stars-1" />
+        <div className="galaxy-stars galaxy-stars-2" />
+        <div className="galaxy-stars galaxy-stars-3" />
+        {/* Nebula blobs - rotating + pulsing */}
+        <div className="absolute top-1/4 -left-32 w-[28rem] h-[28rem] rounded-full blur-[120px] bg-fuchsia-600/40 animate-nebula-1" />
+        <div className="absolute bottom-1/3 -right-32 w-[32rem] h-[32rem] rounded-full blur-[140px] bg-purple-600/40 animate-nebula-2" />
+        <div className="absolute top-2/3 left-1/3 w-80 h-80 rounded-full blur-[100px] bg-violet-500/30 animate-nebula-3" />
+        <div className="absolute top-10 right-1/4 w-72 h-72 rounded-full blur-[100px] bg-pink-500/20 animate-nebula-1" style={{ animationDelay: '-8s' }} />
+        {/* Shooting stars */}
+        <div className="shooting-star shooting-star-1" />
+        <div className="shooting-star shooting-star-2" />
+        <div className="shooting-star shooting-star-3" />
+        {/* Galaxy ring */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140vmin] h-[140vmin] rounded-full border border-fuchsia-500/5 animate-galaxy-rotate" style={{
+          background: 'conic-gradient(from 0deg, transparent 0%, rgba(217,70,239,0.06) 25%, transparent 50%, rgba(168,85,247,0.06) 75%, transparent 100%)'
         }} />
-        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-fuchsia-600/30 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/3 -right-32 w-96 h-96 bg-purple-600/30 rounded-full blur-[120px]" />
-        <div className="absolute top-2/3 left-1/2 w-72 h-72 bg-violet-500/20 rounded-full blur-[100px]" />
       </div>
 
       <div className="relative z-10">
         {/* HERO */}
-        <section className="min-h-screen flex flex-col items-center justify-center px-4 py-20 text-center">
-          <div className="mb-8 relative">
-            <div className="absolute inset-0 bg-fuchsia-500/30 blur-3xl rounded-full" />
-            <img src={logo} alt="Ultra View" className="relative w-56 sm:w-72 md:w-80 rounded-2xl shadow-[0_0_60px_rgba(217,70,239,0.5)] border-2 border-purple-400/30" />
+        <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-20 text-center overflow-hidden">
+          {/* Hero ambient banner */}
+          <div className="absolute inset-0 opacity-25">
+            <img src={bannerHero} alt="" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0a0118]/70 via-transparent to-[#0a0118]" />
           </div>
-          <span className="text-xs sm:text-sm uppercase tracking-[0.3em] text-fuchsia-300 mb-4">Sua TV Completa</span>
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold max-w-3xl bg-gradient-to-b from-white to-purple-200 bg-clip-text text-transparent leading-tight">
-            Tenha acesso ilimitado a filmes, séries e TV ao vivo em um único aplicativo.
-          </h1>
-          <a href="#planos" className="mt-10 inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-white bg-gradient-to-r from-fuchsia-600 to-purple-700 hover:from-fuchsia-500 hover:to-purple-600 transition-all shadow-[0_0_30px_rgba(217,70,239,0.6)] hover:scale-105">
-            Começar Agora <Zap className="w-5 h-5" />
-          </a>
-          <div className="mt-16 text-xs uppercase tracking-[0.4em] text-purple-300/70">Conteúdo Ilimitado</div>
-        </section>
 
-        {/* CATEGORIES */}
-        <section className="py-20 px-4">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-center mb-3 bg-gradient-to-r from-fuchsia-300 to-purple-300 bg-clip-text text-transparent">O QUE VOCÊ VAI ENCONTRAR</h2>
-            <p className="text-center text-purple-200/70 mb-12">Tudo em um só lugar</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {categories.map((c) => (
-                <div key={c.title} className="group relative p-6 rounded-2xl bg-gradient-to-br from-purple-900/40 to-indigo-950/40 border border-purple-400/20 backdrop-blur-sm hover:border-fuchsia-400/50 transition-all hover:-translate-y-1">
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-fuchsia-500/0 to-purple-500/0 group-hover:from-fuchsia-500/10 group-hover:to-purple-500/10 transition-all" />
-                  <c.icon className="w-10 h-10 text-fuchsia-400 mb-4 relative" />
-                  <h3 className="text-xl font-bold mb-2 relative">{c.title}</h3>
-                  <p className="text-purple-200/80 relative">{c.desc}</p>
-                </div>
-              ))}
-            </div>
+          <div className="relative mb-8">
+            <div className="absolute inset-0 bg-fuchsia-500/40 blur-3xl rounded-full animate-pulse" />
+            <img src={logo} alt="Ultra View" className="relative w-56 sm:w-72 md:w-80 rounded-2xl shadow-[0_0_60px_rgba(217,70,239,0.6)] border-2 border-purple-400/30" />
           </div>
+          <span className="relative text-xs sm:text-sm uppercase tracking-[0.3em] text-fuchsia-300 mb-4">Sua TV Completa</span>
+          <h1 className="relative text-3xl sm:text-5xl md:text-6xl font-extrabold max-w-3xl bg-gradient-to-b from-white to-purple-200 bg-clip-text text-transparent leading-tight">
+            Tudo o que você ama assistir em um único aplicativo.
+          </h1>
+          <p className="relative mt-6 text-purple-100/90 max-w-2xl text-base sm:text-lg">
+            Filmes, séries, animes, doramas, esportes e mais de <span className="text-fuchsia-300 font-bold">1500 canais ao vivo</span>. Sem antena, sem instalação. Teste grátis agora.
+          </p>
+          <div className="relative mt-10 flex flex-col sm:flex-row gap-4 items-center">
+            <a href={waLink(trialMsg)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 transition-all shadow-[0_0_30px_rgba(34,197,94,0.6)] hover:scale-105">
+              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+              Teste Grátis no WhatsApp
+            </a>
+            <a href="#planos" className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-white bg-gradient-to-r from-fuchsia-600 to-purple-700 hover:from-fuchsia-500 hover:to-purple-600 transition-all shadow-[0_0_30px_rgba(217,70,239,0.6)] hover:scale-105">
+              Ver Planos <Zap className="w-5 h-5" />
+            </a>
+          </div>
+          <div className="relative mt-16 text-xs uppercase tracking-[0.4em] text-purple-300/70">+50.000 títulos disponíveis</div>
         </section>
 
         {/* STREAMINGS */}
         <section className="py-20 px-4 border-y border-purple-500/20 bg-purple-950/20">
           <div className="max-w-6xl mx-auto text-center">
             <p className="text-sm uppercase tracking-[0.3em] text-fuchsia-300 mb-3">Catálogo premium</p>
-            <h2 className="text-3xl sm:text-4xl font-extrabold mb-12 bg-gradient-to-r from-white to-purple-300 bg-clip-text text-transparent">TODOS OS STREAMINGS EM UM SÓ APLICATIVO</h2>
+            <h2 className="text-3xl sm:text-4xl font-extrabold mb-4 bg-gradient-to-r from-white to-purple-300 bg-clip-text text-transparent">TODOS OS STREAMINGS EM UM SÓ LUGAR</h2>
+            <p className="text-purple-200/80 mb-12 max-w-2xl mx-auto">Pare de pagar várias mensalidades. Aqui você assiste o melhor de cada plataforma por um preço justo.</p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {streamings.map((s) => (
-                <div key={s} className="aspect-video flex items-center justify-center rounded-xl bg-gradient-to-br from-purple-800/40 to-indigo-900/40 border border-purple-400/20 backdrop-blur-sm hover:border-fuchsia-400/50 transition-all">
-                  <span className="font-bold text-purple-100">{s}</span>
-                </div>
-              ))}
+              {streamings.map((s) => <StreamingLogo key={s.name} s={s} />)}
             </div>
           </div>
         </section>
 
-        {/* CONTENT ROWS */}
-        <section className="py-20">
+        {/* CONTENT WITH SMART BANNERS */}
+        <section className="py-20 px-4">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-12 px-4">
+            <div className="text-center mb-12">
               <p className="text-sm uppercase tracking-[0.3em] text-fuchsia-300 mb-3">Em destaque</p>
-              <h2 className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-fuchsia-300 to-purple-300 bg-clip-text text-transparent">CONTEÚDOS EM DESTAQUE</h2>
+              <h2 className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-fuchsia-300 to-purple-300 bg-clip-text text-transparent">CONTEÚDO PARA TODA A FAMÍLIA</h2>
             </div>
-            <div className="space-y-12">
-              <PosterRow title="Filmes Lançamentos" items={posters.filmes} />
-              <PosterRow title="Séries do Momento" items={posters.series} />
-              <PosterRow title="Animes em Destaque" items={posters.animes} />
-              <PosterRow title="Doramas Mais Badalados" items={posters.doramas} />
+            <div className="space-y-16">
+              <PosterRow
+                title="FILMES"
+                subtitle="Mais de 30 mil filmes em alta qualidade — dos clássicos aos lançamentos."
+                badge="+30.000 títulos"
+                banner={bannerFilmes}
+                items={posters.filmes}
+              />
+              <PosterRow
+                title="SÉRIES"
+                subtitle="Maratone mais de 15 mil séries completas, todas as temporadas em 4K."
+                badge="+15.000 séries"
+                banner={bannerSeries}
+                items={posters.series}
+              />
+              <PosterRow
+                title="ANIMES"
+                subtitle="Mais de 2 mil animes legendados e dublados — dos shounen aos clássicos."
+                badge="+2.000 animes"
+                banner={bannerAnimes}
+                items={posters.animes}
+              />
+              <PosterRow
+                title="DORAMAS"
+                subtitle="Mergulhe em mais de 3 mil doramas asiáticos imperdíveis."
+                badge="+3.000 doramas"
+                banner={bannerDoramas}
+                items={posters.doramas}
+              />
+              <CategoryBanner
+                title="TV AO VIVO + ESPORTES"
+                subtitle="Mais de 1500 canais ao vivo 24h, todos os campeonatos e PPVs sem travar."
+                badge="+1.500 canais 24h"
+                banner={bannerAoVivo}
+              />
             </div>
           </div>
         </section>
 
-        {/* HOW IT WORKS */}
+        {/* DEVICES / HOW IT WORKS */}
         <section className="py-20 px-4 border-y border-purple-500/20 bg-purple-950/20">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <p className="text-sm uppercase tracking-[0.3em] text-fuchsia-300 mb-3">Sem complicação</p>
-              <h2 className="text-3xl sm:text-4xl font-extrabold mb-4 bg-gradient-to-r from-white to-purple-300 bg-clip-text text-transparent">COMO FUNCIONA NOSSO SISTEMA</h2>
-              <p className="text-purple-200/80 max-w-2xl mx-auto">Não precisa de antena ou instalação. Basta ter internet e aproveitar todo o conteúdo no seu dispositivo.</p>
+              <h2 className="text-3xl sm:text-4xl font-extrabold mb-4 bg-gradient-to-r from-white to-purple-300 bg-clip-text text-transparent">FUNCIONA EM TODOS OS APARELHOS</h2>
+              <p className="text-purple-200/80 max-w-2xl mx-auto">Não precisa de antena ou instalação. Basta ter internet e aproveitar em qualquer tela.</p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-              {devices.map((d) => (
-                <div key={d.name} className="p-6 rounded-2xl bg-gradient-to-br from-purple-900/40 to-indigo-950/40 border border-purple-400/20 text-center backdrop-blur-sm hover:border-fuchsia-400/50 transition-all">
-                  <d.icon className="w-10 h-10 mx-auto text-fuchsia-400 mb-4" />
-                  <h3 className="font-bold text-lg mb-2">{d.name}</h3>
-                  <p className="text-sm text-purple-200/80">{d.desc}</p>
-                </div>
-              ))}
+              {devices.map((d) => <DeviceCard key={d.name} d={d} />)}
             </div>
           </div>
         </section>
@@ -263,38 +348,63 @@ function Index() {
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
               <p className="text-sm uppercase tracking-[0.3em] text-fuchsia-300 mb-3">Escolha seu plano</p>
-              <h2 className="text-3xl sm:text-4xl font-extrabold mb-4 bg-gradient-to-r from-fuchsia-300 to-purple-300 bg-clip-text text-transparent">PLANOS</h2>
-              <p className="text-purple-200/80">Acesso completo a todo o conteúdo. Cancele quando quiser.</p>
+              <h2 className="text-3xl sm:text-4xl font-extrabold mb-4 bg-gradient-to-r from-fuchsia-300 to-purple-300 bg-clip-text text-transparent">PLANOS QUE CABEM NO BOLSO</h2>
+              <p className="text-purple-200/80">Acesso completo a todo o conteúdo. Cancele quando quiser. Suporte 100% humanizado pelo WhatsApp.</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-              {plans.map((p, i) => (
-                <div key={p.name} className={`relative p-6 rounded-2xl border backdrop-blur-sm flex flex-col ${i === 2 || i === 4 ? "border-fuchsia-400/60 bg-gradient-to-br from-fuchsia-900/50 to-purple-900/50 shadow-[0_0_30px_rgba(217,70,239,0.3)]" : "border-purple-400/20 bg-gradient-to-br from-purple-900/40 to-indigo-950/40"}`}>
-                  {p.badge && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-fuchsia-500 to-purple-600 whitespace-nowrap">
-                      {p.badge}
+              {plans.map((p) => {
+                const msg = p.name === "Teste Grátis"
+                  ? "Olá, gostaria de fazer o teste gratuito da Ultra View"
+                  : `Olá, gostaria de assinar o plano ${p.name} (${p.price}${p.period}) da Ultra View`;
+                return (
+                  <div key={p.name} className={`relative p-6 rounded-2xl border backdrop-blur-sm flex flex-col ${p.highlight ? "border-fuchsia-400/60 bg-gradient-to-br from-fuchsia-900/50 to-purple-900/50 shadow-[0_0_30px_rgba(217,70,239,0.3)] scale-[1.02]" : "border-purple-400/20 bg-gradient-to-br from-purple-900/40 to-indigo-950/40"}`}>
+                    {p.badge && (
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-fuchsia-500 to-purple-600 whitespace-nowrap shadow-lg">
+                        {p.badge}
+                      </div>
+                    )}
+                    <h3 className="text-xl font-bold mb-2">{p.name}</h3>
+                    <div className="mb-6">
+                      <span className="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-300 to-purple-200 bg-clip-text text-transparent">{p.price}</span>
+                      <span className="text-purple-200/70">{p.period}</span>
                     </div>
-                  )}
-                  <h3 className="text-xl font-bold mb-2">{p.name}</h3>
-                  <div className="mb-6">
-                    <span className="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-300 to-purple-200 bg-clip-text text-transparent">{p.price}</span>
-                    <span className="text-purple-200/70">{p.period}</span>
+                    <ul className="space-y-2 mb-6 flex-1">
+                      {p.features.map((f) => (
+                        <li key={f} className="flex items-start gap-2 text-sm text-purple-100">
+                          <Check className="w-4 h-4 text-fuchsia-400 shrink-0 mt-0.5" />
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                    <a
+                      href={waLink(msg)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-full font-bold bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 transition-all hover:scale-[1.03] shadow-lg shadow-emerald-900/40 text-white"
+                    >
+                      <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                      {p.cta}
+                    </a>
                   </div>
-                  <ul className="space-y-2 mb-6 flex-1">
-                    {p.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-purple-100">
-                        <Check className="w-4 h-4 text-fuchsia-400 shrink-0 mt-0.5" />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <button className="w-full py-3 rounded-full font-bold bg-gradient-to-r from-fuchsia-600 to-purple-700 hover:from-fuchsia-500 hover:to-purple-600 transition-all hover:scale-[1.02] shadow-lg shadow-fuchsia-900/40">
-                    {p.cta}
-                  </button>
-                </div>
-              ))}
+                );
+              })}
             </div>
+            <p className="text-center text-purple-200/60 text-sm mt-8">
+              💬 Atendimento direto pelo WhatsApp: <span className="text-fuchsia-300 font-bold">(85) 99117-3080</span>
+            </p>
           </div>
         </section>
+
+        {/* FLOATING WHATSAPP BUTTON */}
+        <a
+          href={waLink(trialMsg)}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Fale conosco no WhatsApp"
+          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.6)] hover:scale-110 transition-transform animate-pulse"
+        >
+          <svg viewBox="0 0 24 24" className="w-7 h-7 fill-white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        </a>
 
         {/* FOOTER */}
         <footer className="py-12 px-4 border-t border-purple-500/20 text-center">
