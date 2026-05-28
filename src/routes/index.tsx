@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Check, Zap } from "lucide-react";
+import { useState } from "react";
+import { Check, Zap, Tv, Smartphone, Laptop, MonitorPlay, Flame, Package } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import logo from "@/assets/ultraview-logo.jpg";
 
 import bannerHero from "@/assets/banners/banner-hero.jpg";
@@ -50,7 +52,7 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "Ultra View — Sua TV Completa" },
+      { title: "Ultra View — Seu Lazer Favorito" },
       { name: "description", content: "Filmes, séries, animes, doramas, esportes e TV ao vivo em um único aplicativo. Sem antena, sem instalação." },
     ],
   }),
@@ -60,34 +62,46 @@ const WHATSAPP_NUMBER = "5585991173080";
 const waLink = (msg: string) =>
   `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
-// Streaming logos via simple-icons CDN (CC0). Color tinted for galaxy theme.
+// Streaming logos via simple-icons CDN (CC0).
 const streamings = [
   { name: "Netflix", slug: "netflix", color: "E50914" },
   { name: "Disney+", slug: "disneyplus", color: "0E47BA" },
   { name: "Prime Video", slug: "primevideo", color: "00A8E1" },
   { name: "Globoplay", slug: "globo", color: "FF3333" },
   { name: "Paramount+", slug: "paramountplus", color: "0064FF" },
-  { name: "HBO Max", slug: "hbo", color: "B026FF" },
+  { name: "HBO Max", slug: "max", color: "B026FF" },
   { name: "Apple TV+", slug: "appletv", color: "FFFFFF" },
-  { name: "Star+", slug: "staehler", color: "FFD400" },
+  { name: "Star+", slug: "disneyplus", color: "FFD400" },
 ];
 
-// Device illustrations using emoji-rich SVG style isn't ideal; use simple-icons for brand devices.
 const devices = [
-  { name: "Smart TV", desc: "Samsung, LG, Android TV", slug: "lg", fallback: "📺" },
-  { name: "TV Box", desc: "Qualquer TV Box Android", slug: "android", fallback: "📦" },
-  { name: "Fire Stick", desc: "Amazon Fire TV Stick", slug: "amazonfiretv", fallback: "🔥" },
-  { name: "Mi Stick", desc: "Xiaomi Mi TV Stick", slug: "xiaomi", fallback: "🟠" },
-  { name: "Notebook", desc: "Windows, Mac e Linux", slug: "apple", fallback: "💻" },
-  { name: "Celular", desc: "Android e iOS", slug: "apple", fallback: "📱" },
+  { name: "Smart TV", desc: "Samsung, LG, Android TV", icon: Tv },
+  { name: "TV Box", desc: "Qualquer TV Box Android", icon: Package },
+  { name: "Fire Stick", desc: "Amazon Fire TV Stick", icon: Flame },
+  { name: "Mi Stick", desc: "Xiaomi Mi TV Stick", icon: MonitorPlay },
+  { name: "Notebook", desc: "Windows, Mac e Linux", icon: Laptop },
+  { name: "Celular", desc: "Android e iOS", icon: Smartphone },
+];
+
+// Device options shown in the trial selector (modern + legacy models)
+const trialDevices = [
+  { name: "Smart TV (modelo atual)", icon: Tv },
+  { name: "Smart TV antiga (até 2018)", icon: Tv },
+  { name: "TV Box Android", icon: Package },
+  { name: "Amazon Fire Stick", icon: Flame },
+  { name: "Xiaomi Mi Stick / Mi Box", icon: MonitorPlay },
+  { name: "Notebook / PC", icon: Laptop },
+  { name: "Celular Android", icon: Smartphone },
+  { name: "iPhone / iPad", icon: Smartphone },
+  { name: "Outro / não sei", icon: Tv },
 ];
 
 const plans = [
-  { name: "Teste Grátis", price: "R$ 0", period: "", badge: "Sem cartão", highlight: false, features: ["Acesso completo", "Sem cartão de crédito", "Sem compromisso", "Suporte humanizado"], cta: "Quero o teste grátis" },
-  { name: "Mensal", price: "R$ 35", period: "/mês", badge: null, highlight: false, features: ["Todo o catálogo", "Multiplataforma", "Suporte humanizado"], cta: "Assinar Mensal" },
-  { name: "Trimestral", price: "R$ 95", period: "/3 meses", badge: "Ganhe 1 mês grátis", highlight: true, features: ["1 mês extra grátis", "Economia garantida", "Suporte humanizado"], cta: "Assinar Trimestral" },
-  { name: "Semestral", price: "R$ 180", period: "/6 meses", badge: null, highlight: false, features: ["Preço reduzido", "Sem reajuste", "Suporte humanizado"], cta: "Assinar Semestral" },
-  { name: "Anual", price: "R$ 350", period: "/ano", badge: "Ganhe 3 meses grátis", highlight: true, features: ["3 meses extras grátis", "Melhor custo-benefício", "Suporte humanizado"], cta: "Assinar Anual" },
+  { name: "Teste Grátis", price: "R$ 0", period: "", badge: "Sem cartão", highlight: false, features: ["Acesso completo", "Sem cartão de crédito", "Sem compromisso", "Suporte humanizado"], cta: "Quero o teste grátis", checkout: null },
+  { name: "Mensal", price: "R$ 30", period: "/mês", badge: null, highlight: false, features: ["Todo o catálogo", "Multiplataforma", "Suporte humanizado"], cta: "Assinar Mensal", checkout: "https://mpago.la/2TjzxQE" },
+  { name: "Trimestral", price: "R$ 80", period: "/3 meses", badge: null, highlight: false, features: ["Economia garantida", "Sem reajuste", "Suporte humanizado"], cta: "Assinar Trimestral", checkout: "https://mpago.la/2KCSm28" },
+  { name: "Semestral", price: "R$ 160", period: "/6 meses", badge: null, highlight: false, features: ["Preço reduzido", "Sem reajuste", "Suporte humanizado"], cta: "Assinar Semestral", checkout: "https://mpago.la/14ByT2Z" },
+  { name: "Anual", price: "R$ 290", period: "/ano", badge: "Ganhe 3 meses grátis", highlight: true, features: ["3 meses extras grátis", "Melhor custo-benefício", "Suporte humanizado"], cta: "Assinar Anual", checkout: "https://mpago.la/1VgvDyS" },
 ];
 
 type Poster = { title: string; img: string };
@@ -191,24 +205,52 @@ function StreamingLogo({ s }: { s: { name: string; slug: string; color: string }
   );
 }
 
-function DeviceCard({ d }: { d: { name: string; desc: string; slug: string; fallback: string } }) {
+function DeviceCard({ d }: { d: { name: string; desc: string; icon: React.ComponentType<{ className?: string }> } }) {
+  const Icon = d.icon;
   return (
     <div className="p-6 rounded-2xl bg-gradient-to-br from-purple-900/40 to-indigo-950/60 border border-purple-400/20 text-center backdrop-blur-sm hover:border-fuchsia-400/60 hover:-translate-y-1 transition-all group">
       <div className="relative w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-xl bg-gradient-to-br from-fuchsia-600/20 to-purple-700/20 border border-fuchsia-400/30 shadow-[0_0_20px_rgba(217,70,239,0.3)] group-hover:shadow-[0_0_30px_rgba(217,70,239,0.6)]">
-        <img
-          src={`https://cdn.simpleicons.org/${d.slug}/ffffff`}
-          alt={d.name}
-          loading="lazy"
-          className="w-8 h-8 object-contain"
-          onError={(e) => {
-            const el = e.currentTarget as HTMLImageElement;
-            el.outerHTML = `<span class="text-3xl">${d.fallback}</span>`;
-          }}
-        />
+        <Icon className="w-8 h-8 text-fuchsia-200" />
       </div>
       <h3 className="font-bold text-lg mb-1 text-white">{d.name}</h3>
       <p className="text-sm text-purple-200/80">{d.desc}</p>
     </div>
+  );
+}
+
+function TrialDialog({ trigger }: { trigger: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent className="bg-gradient-to-br from-[#1a0b2e] to-[#0a0118] border-fuchsia-400/30 text-white max-w-2xl">
+        <DialogHeader>
+          <DialogTitle className="text-2xl bg-gradient-to-r from-fuchsia-300 to-purple-300 bg-clip-text text-transparent">Em qual aparelho você quer assistir?</DialogTitle>
+          <DialogDescription className="text-purple-200/80">
+            Escolha seu dispositivo para receber as instruções do teste grátis direto no WhatsApp.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">
+          {trialDevices.map((d) => {
+            const Icon = d.icon;
+            const msg = `Olá, gostaria de fazer o teste gratuito da Ultra View no meu ${d.name}.`;
+            return (
+              <a
+                key={d.name}
+                href={waLink(msg)}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setOpen(false)}
+                className="flex flex-col items-center justify-center text-center gap-2 p-4 rounded-xl border border-purple-400/20 bg-purple-900/30 hover:bg-fuchsia-900/40 hover:border-fuchsia-400/60 hover:scale-[1.03] transition-all"
+              >
+                <Icon className="w-7 h-7 text-fuchsia-300" />
+                <span className="text-xs font-semibold text-purple-100 leading-tight">{d.name}</span>
+              </a>
+            );
+          })}
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -252,7 +294,7 @@ function Index() {
             <div className="absolute inset-0 bg-fuchsia-500/40 blur-3xl rounded-full animate-pulse" />
             <img src={logo} alt="Ultra View" className="relative w-56 sm:w-72 md:w-80 rounded-2xl shadow-[0_0_60px_rgba(217,70,239,0.6)] border-2 border-purple-400/30" />
           </div>
-          <span className="relative text-xs sm:text-sm uppercase tracking-[0.3em] text-fuchsia-300 mb-4">Sua TV Completa</span>
+          <span className="relative text-xs sm:text-sm uppercase tracking-[0.3em] text-fuchsia-300 mb-4">Seu Lazer Favorito</span>
           <h1 className="relative text-3xl sm:text-5xl md:text-6xl font-extrabold max-w-3xl bg-gradient-to-b from-white to-purple-200 bg-clip-text text-transparent leading-tight">
             Tudo o que você ama assistir em um único aplicativo.
           </h1>
@@ -260,10 +302,12 @@ function Index() {
             Filmes, séries, animes, doramas, esportes e mais de <span className="text-fuchsia-300 font-bold">1500 canais ao vivo</span>. Sem antena, sem instalação. Teste grátis agora.
           </p>
           <div className="relative mt-10 flex flex-col sm:flex-row gap-4 items-center">
-            <a href={waLink(trialMsg)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 transition-all shadow-[0_0_30px_rgba(34,197,94,0.6)] hover:scale-105">
-              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-              Teste Grátis no WhatsApp
-            </a>
+            <TrialDialog trigger={
+              <button className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 transition-all shadow-[0_0_30px_rgba(34,197,94,0.6)] hover:scale-105">
+                <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                Teste Grátis Agora
+              </button>
+            } />
             <a href="#planos" className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-white bg-gradient-to-r from-fuchsia-600 to-purple-700 hover:from-fuchsia-500 hover:to-purple-600 transition-all shadow-[0_0_30px_rgba(217,70,239,0.6)] hover:scale-105">
               Ver Planos <Zap className="w-5 h-5" />
             </a>
@@ -353,9 +397,20 @@ function Index() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
               {plans.map((p) => {
-                const msg = p.name === "Teste Grátis"
-                  ? "Olá, gostaria de fazer o teste gratuito da Ultra View"
-                  : `Olá, gostaria de assinar o plano ${p.name} (${p.price}${p.period}) da Ultra View`;
+                const waMsg = `Olá, gostaria de assinar o plano ${p.name} (${p.price}${p.period}) da Ultra View`;
+                const isTrial = p.name === "Teste Grátis";
+                const isCheckout = !!p.checkout;
+                const ctaInner = (
+                  <>
+                    {isCheckout ? (
+                      <Zap className="w-4 h-4" />
+                    ) : (
+                      <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                    )}
+                    {p.cta}
+                  </>
+                );
+                const ctaClass = `w-full inline-flex items-center justify-center gap-2 py-3 rounded-full font-bold transition-all hover:scale-[1.03] shadow-lg text-white ${isCheckout ? "bg-gradient-to-r from-fuchsia-600 to-purple-700 hover:from-fuchsia-500 hover:to-purple-600 shadow-fuchsia-900/40" : "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 shadow-emerald-900/40"}`;
                 return (
                   <div key={p.name} className={`relative p-6 rounded-2xl border backdrop-blur-sm flex flex-col ${p.highlight ? "border-fuchsia-400/60 bg-gradient-to-br from-fuchsia-900/50 to-purple-900/50 shadow-[0_0_30px_rgba(217,70,239,0.3)] scale-[1.02]" : "border-purple-400/20 bg-gradient-to-br from-purple-900/40 to-indigo-950/40"}`}>
                     {p.badge && (
@@ -376,15 +431,13 @@ function Index() {
                         </li>
                       ))}
                     </ul>
-                    <a
-                      href={waLink(msg)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-full font-bold bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 transition-all hover:scale-[1.03] shadow-lg shadow-emerald-900/40 text-white"
-                    >
-                      <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                      {p.cta}
-                    </a>
+                    {isTrial ? (
+                      <TrialDialog trigger={<button className={ctaClass}>{ctaInner}</button>} />
+                    ) : isCheckout ? (
+                      <a href={p.checkout!} target="_blank" rel="noopener noreferrer" className={ctaClass}>{ctaInner}</a>
+                    ) : (
+                      <a href={waLink(waMsg)} target="_blank" rel="noopener noreferrer" className={ctaClass}>{ctaInner}</a>
+                    )}
                   </div>
                 );
               })}
@@ -409,7 +462,7 @@ function Index() {
         {/* FOOTER */}
         <footer className="py-12 px-4 border-t border-purple-500/20 text-center">
           <img src={logo} alt="Ultra View" className="w-20 mx-auto mb-4 rounded-lg" />
-          <p className="text-purple-200/60 text-sm">© {new Date().getFullYear()} Ultra View. Sua TV Completa.</p>
+          <p className="text-purple-200/60 text-sm">© {new Date().getFullYear()} Ultra View. Seu Lazer Favorito.</p>
         </footer>
       </div>
     </div>
