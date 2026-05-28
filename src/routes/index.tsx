@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Check, Zap } from "lucide-react";
+import { useState } from "react";
+import { Check, Zap, Tv, Smartphone, Laptop, MonitorPlay, Flame, Package } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import logo from "@/assets/ultraview-logo.jpg";
 
 import bannerHero from "@/assets/banners/banner-hero.jpg";
