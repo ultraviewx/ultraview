@@ -52,7 +52,7 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "Ultra View — Sua TV Completa" },
+      { title: "Ultra View — Seu Lazer Favorito" },
       { name: "description", content: "Filmes, séries, animes, doramas, esportes e TV ao vivo em um único aplicativo. Sem antena, sem instalação." },
     ],
   }),
@@ -62,34 +62,46 @@ const WHATSAPP_NUMBER = "5585991173080";
 const waLink = (msg: string) =>
   `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
-// Streaming logos via simple-icons CDN (CC0). Color tinted for galaxy theme.
+// Streaming logos via simple-icons CDN (CC0).
 const streamings = [
   { name: "Netflix", slug: "netflix", color: "E50914" },
   { name: "Disney+", slug: "disneyplus", color: "0E47BA" },
   { name: "Prime Video", slug: "primevideo", color: "00A8E1" },
   { name: "Globoplay", slug: "globo", color: "FF3333" },
   { name: "Paramount+", slug: "paramountplus", color: "0064FF" },
-  { name: "HBO Max", slug: "hbo", color: "B026FF" },
+  { name: "HBO Max", slug: "max", color: "B026FF" },
   { name: "Apple TV+", slug: "appletv", color: "FFFFFF" },
-  { name: "Star+", slug: "staehler", color: "FFD400" },
+  { name: "Star+", slug: "disneyplus", color: "FFD400" },
 ];
 
-// Device illustrations using emoji-rich SVG style isn't ideal; use simple-icons for brand devices.
 const devices = [
-  { name: "Smart TV", desc: "Samsung, LG, Android TV", slug: "lg", fallback: "📺" },
-  { name: "TV Box", desc: "Qualquer TV Box Android", slug: "android", fallback: "📦" },
-  { name: "Fire Stick", desc: "Amazon Fire TV Stick", slug: "amazonfiretv", fallback: "🔥" },
-  { name: "Mi Stick", desc: "Xiaomi Mi TV Stick", slug: "xiaomi", fallback: "🟠" },
-  { name: "Notebook", desc: "Windows, Mac e Linux", slug: "apple", fallback: "💻" },
-  { name: "Celular", desc: "Android e iOS", slug: "apple", fallback: "📱" },
+  { name: "Smart TV", desc: "Samsung, LG, Android TV", icon: Tv },
+  { name: "TV Box", desc: "Qualquer TV Box Android", icon: Package },
+  { name: "Fire Stick", desc: "Amazon Fire TV Stick", icon: Flame },
+  { name: "Mi Stick", desc: "Xiaomi Mi TV Stick", icon: MonitorPlay },
+  { name: "Notebook", desc: "Windows, Mac e Linux", icon: Laptop },
+  { name: "Celular", desc: "Android e iOS", icon: Smartphone },
+];
+
+// Device options shown in the trial selector (modern + legacy models)
+const trialDevices = [
+  { name: "Smart TV (modelo atual)", icon: Tv },
+  { name: "Smart TV antiga (até 2018)", icon: Tv },
+  { name: "TV Box Android", icon: Package },
+  { name: "Amazon Fire Stick", icon: Flame },
+  { name: "Xiaomi Mi Stick / Mi Box", icon: MonitorPlay },
+  { name: "Notebook / PC", icon: Laptop },
+  { name: "Celular Android", icon: Smartphone },
+  { name: "iPhone / iPad", icon: Smartphone },
+  { name: "Outro / não sei", icon: Tv },
 ];
 
 const plans = [
-  { name: "Teste Grátis", price: "R$ 0", period: "", badge: "Sem cartão", highlight: false, features: ["Acesso completo", "Sem cartão de crédito", "Sem compromisso", "Suporte humanizado"], cta: "Quero o teste grátis" },
-  { name: "Mensal", price: "R$ 35", period: "/mês", badge: null, highlight: false, features: ["Todo o catálogo", "Multiplataforma", "Suporte humanizado"], cta: "Assinar Mensal" },
-  { name: "Trimestral", price: "R$ 95", period: "/3 meses", badge: "Ganhe 1 mês grátis", highlight: true, features: ["1 mês extra grátis", "Economia garantida", "Suporte humanizado"], cta: "Assinar Trimestral" },
-  { name: "Semestral", price: "R$ 180", period: "/6 meses", badge: null, highlight: false, features: ["Preço reduzido", "Sem reajuste", "Suporte humanizado"], cta: "Assinar Semestral" },
-  { name: "Anual", price: "R$ 350", period: "/ano", badge: "Ganhe 3 meses grátis", highlight: true, features: ["3 meses extras grátis", "Melhor custo-benefício", "Suporte humanizado"], cta: "Assinar Anual" },
+  { name: "Teste Grátis", price: "R$ 0", period: "", badge: "Sem cartão", highlight: false, features: ["Acesso completo", "Sem cartão de crédito", "Sem compromisso", "Suporte humanizado"], cta: "Quero o teste grátis", checkout: null },
+  { name: "Mensal", price: "R$ 30", period: "/mês", badge: null, highlight: false, features: ["Todo o catálogo", "Multiplataforma", "Suporte humanizado"], cta: "Assinar Mensal", checkout: "https://mpago.la/2TjzxQE" },
+  { name: "Trimestral", price: "R$ 80", period: "/3 meses", badge: null, highlight: false, features: ["Economia garantida", "Sem reajuste", "Suporte humanizado"], cta: "Assinar Trimestral", checkout: "https://mpago.la/2KCSm28" },
+  { name: "Semestral", price: "R$ 160", period: "/6 meses", badge: null, highlight: false, features: ["Preço reduzido", "Sem reajuste", "Suporte humanizado"], cta: "Assinar Semestral", checkout: "https://mpago.la/14ByT2Z" },
+  { name: "Anual", price: "R$ 290", period: "/ano", badge: "Ganhe 3 meses grátis", highlight: true, features: ["3 meses extras grátis", "Melhor custo-benefício", "Suporte humanizado"], cta: "Assinar Anual", checkout: "https://mpago.la/1VgvDyS" },
 ];
 
 type Poster = { title: string; img: string };
