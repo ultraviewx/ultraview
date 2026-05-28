@@ -434,7 +434,12 @@ function Index() {
                     {isTrial ? (
                       <TrialDialog trigger={<button className={ctaClass}>{ctaInner}</button>} />
                     ) : isCheckout ? (
-                      <a href={p.checkout!} target="_blank" rel="noopener noreferrer" className={ctaClass}>{ctaInner}</a>
+                      <CheckoutDialog
+                        planName={p.name}
+                        priceLabel={`${p.price}${p.period}`}
+                        checkoutUrl={p.checkout!}
+                        trigger={<button className={ctaClass}>{ctaInner}</button>}
+                      />
                     ) : (
                       <a href={waLink(waMsg)} target="_blank" rel="noopener noreferrer" className={ctaClass}>{ctaInner}</a>
                     )}
