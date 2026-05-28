@@ -205,24 +205,52 @@ function StreamingLogo({ s }: { s: { name: string; slug: string; color: string }
   );
 }
 
-function DeviceCard({ d }: { d: { name: string; desc: string; slug: string; fallback: string } }) {
+function DeviceCard({ d }: { d: { name: string; desc: string; icon: React.ComponentType<{ className?: string }> } }) {
+  const Icon = d.icon;
   return (
     <div className="p-6 rounded-2xl bg-gradient-to-br from-purple-900/40 to-indigo-950/60 border border-purple-400/20 text-center backdrop-blur-sm hover:border-fuchsia-400/60 hover:-translate-y-1 transition-all group">
       <div className="relative w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-xl bg-gradient-to-br from-fuchsia-600/20 to-purple-700/20 border border-fuchsia-400/30 shadow-[0_0_20px_rgba(217,70,239,0.3)] group-hover:shadow-[0_0_30px_rgba(217,70,239,0.6)]">
-        <img
-          src={`https://cdn.simpleicons.org/${d.slug}/ffffff`}
-          alt={d.name}
-          loading="lazy"
-          className="w-8 h-8 object-contain"
-          onError={(e) => {
-            const el = e.currentTarget as HTMLImageElement;
-            el.outerHTML = `<span class="text-3xl">${d.fallback}</span>`;
-          }}
-        />
+        <Icon className="w-8 h-8 text-fuchsia-200" />
       </div>
       <h3 className="font-bold text-lg mb-1 text-white">{d.name}</h3>
       <p className="text-sm text-purple-200/80">{d.desc}</p>
     </div>
+  );
+}
+
+function TrialDialog({ trigger }: { trigger: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent className="bg-gradient-to-br from-[#1a0b2e] to-[#0a0118] border-fuchsia-400/30 text-white max-w-2xl">
+        <DialogHeader>
+          <DialogTitle className="text-2xl bg-gradient-to-r from-fuchsia-300 to-purple-300 bg-clip-text text-transparent">Em qual aparelho você quer assistir?</DialogTitle>
+          <DialogDescription className="text-purple-200/80">
+            Escolha seu dispositivo para receber as instruções do teste grátis direto no WhatsApp.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">
+          {trialDevices.map((d) => {
+            const Icon = d.icon;
+            const msg = `Olá, gostaria de fazer o teste gratuito da Ultra View no meu ${d.name}.`;
+            return (
+              <a
+                key={d.name}
+                href={waLink(msg)}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setOpen(false)}
+                className="flex flex-col items-center justify-center text-center gap-2 p-4 rounded-xl border border-purple-400/20 bg-purple-900/30 hover:bg-fuchsia-900/40 hover:border-fuchsia-400/60 hover:scale-[1.03] transition-all"
+              >
+                <Icon className="w-7 h-7 text-fuchsia-300" />
+                <span className="text-xs font-semibold text-purple-100 leading-tight">{d.name}</span>
+              </a>
+            );
+          })}
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
