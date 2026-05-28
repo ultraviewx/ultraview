@@ -462,7 +462,7 @@ function Index() {
         {/* FOOTER */}
         <footer className="py-12 px-4 border-t border-purple-500/20 text-center">
           <img src={logo} alt="Ultra View" className="w-20 mx-auto mb-4 rounded-lg" />
-          <p className="text-purple-200/60 text-sm">© {new Date().getFullYear()} Ultra View. Sua TV Completa.</p>
+          <p className="text-purple-200/60 text-sm">© {new Date().getFullYear()} Ultra View. Seu Lazer Favorito.</p>
         </footer>
       </div>
     </div>
