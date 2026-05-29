@@ -1,8 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { Check, Zap, Tv, Smartphone, Laptop, MonitorPlay, Flame, Package } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Check, Zap, Tv, Smartphone, Laptop, MonitorPlay, Flame, Package, X } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import logo from "@/assets/ultraview-logo.jpg";
+
+import logoPrimeVideo from "@/assets/streamings/primevideo.png";
+import logoGloboplay from "@/assets/streamings/globoplay.png";
+import logoStarPlus from "@/assets/streamings/starplus.png";
+
 
 import bannerHero from "@/assets/banners/banner-hero.jpg";
 import bannerFilmes from "@/assets/banners/banner-filmes.jpg";
