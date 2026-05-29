@@ -597,6 +597,9 @@ function Index() {
           </div>
         </section>
 
+        {/* PENDING PAYMENT PROOF BANNER */}
+        <PendingProofBanner />
+
         {/* FLOATING WHATSAPP BUTTON */}
         <a
           href={waLink(trialMsg)}
