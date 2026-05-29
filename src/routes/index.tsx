@@ -189,22 +189,30 @@ function PosterRow({ title, subtitle, badge, banner, items }: { title: string; s
     <div className="space-y-4">
       <CategoryBanner title={title} subtitle={subtitle} badge={badge} banner={banner} />
       <div className="flex gap-3 sm:gap-4 overflow-x-auto px-1 pb-4 scrollbar-thin scrollbar-thumb-purple-500/50">
-        {[...items, ...items].map((t, i) => <PosterCard key={i} item={t} />)}
-      </div>
-    </div>
-  );
-}
-
-function StreamingLogo({ s }: { s: { name: string; slug: string; color: string } }) {
+function StreamingLogo({ s }: { s: Streaming }) {
+  const src = s.img ?? (s.slug ? `https://cdn.simpleicons.org/${s.slug}/ffffff` : null);
   return (
     <div className="group relative aspect-video flex items-center justify-center rounded-xl bg-gradient-to-br from-purple-800/40 to-indigo-900/60 border border-purple-400/20 backdrop-blur-sm hover:border-fuchsia-400/60 hover:scale-105 transition-all overflow-hidden">
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
            style={{ background: `radial-gradient(circle at center, #${s.color}33 0%, transparent 70%)` }} />
-      <img
-        src={`https://cdn.simpleicons.org/${s.slug}/ffffff`}
-        alt={s.name}
-        loading="lazy"
-        className="relative h-8 sm:h-10 w-auto max-w-[60%] object-contain opacity-90 group-hover:opacity-100 drop-shadow-[0_0_8px_rgba(217,70,239,0.6)]"
+      {src ? (
+        <img
+          src={src}
+          alt={s.name}
+          loading="lazy"
+          className="relative h-8 sm:h-10 w-auto max-w-[70%] object-contain opacity-95 group-hover:opacity-100 drop-shadow-[0_0_8px_rgba(217,70,239,0.6)]"
+          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+        />
+      ) : (
+        <span className="relative text-white font-extrabold text-xl sm:text-2xl tracking-tight italic drop-shadow-[0_0_10px_rgba(217,70,239,0.7)]">
+          {s.wordmark ?? s.name}
+        </span>
+      )}
+      <span className="absolute bottom-2 text-[10px] uppercase tracking-wider text-purple-100/70 font-bold">{s.name}</span>
+    </div>
+  );
+}
+
         onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
       />
       <span className="absolute bottom-2 text-[10px] uppercase tracking-wider text-purple-100/70 font-bold">{s.name}</span>
