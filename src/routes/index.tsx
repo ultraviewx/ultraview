@@ -189,6 +189,12 @@ function PosterRow({ title, subtitle, badge, banner, items }: { title: string; s
     <div className="space-y-4">
       <CategoryBanner title={title} subtitle={subtitle} badge={badge} banner={banner} />
       <div className="flex gap-3 sm:gap-4 overflow-x-auto px-1 pb-4 scrollbar-thin scrollbar-thumb-purple-500/50">
+        {[...items, ...items].map((t, i) => <PosterCard key={i} item={t} />)}
+      </div>
+    </div>
+  );
+}
+
 function StreamingLogo({ s }: { s: Streaming }) {
   const src = s.img ?? (s.slug ? `https://cdn.simpleicons.org/${s.slug}/ffffff` : null);
   return (
@@ -213,12 +219,6 @@ function StreamingLogo({ s }: { s: Streaming }) {
   );
 }
 
-        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-      />
-      <span className="absolute bottom-2 text-[10px] uppercase tracking-wider text-purple-100/70 font-bold">{s.name}</span>
-    </div>
-  );
-}
 
 function DeviceCard({ d }: { d: { name: string; desc: string; icon: React.ComponentType<{ className?: string }> } }) {
   const Icon = d.icon;
