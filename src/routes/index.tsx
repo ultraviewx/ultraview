@@ -67,17 +67,19 @@ const WHATSAPP_NUMBER = "5585991173080";
 const waLink = (msg: string) =>
   `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
-// Streaming logos via simple-icons CDN (CC0).
-const streamings = [
+// Streaming logos. `img` overrides the simple-icons CDN slug.
+type Streaming = { name: string; slug?: string; color: string; img?: string; wordmark?: string };
+const streamings: Streaming[] = [
   { name: "Netflix", slug: "netflix", color: "E50914" },
-  { name: "Disney+", slug: "disneyplus", color: "0E47BA" },
-  { name: "Prime Video", slug: "primevideo", color: "00A8E1" },
-  { name: "Globoplay", slug: "globo", color: "FF3333" },
+  { name: "Disney+", color: "0E47BA", wordmark: "Disney+" },
+  { name: "Prime Video", color: "00A8E1", img: logoPrimeVideo },
+  { name: "Globoplay", color: "FF3333", img: logoGloboplay },
   { name: "Paramount+", slug: "paramountplus", color: "0064FF" },
   { name: "HBO Max", slug: "max", color: "B026FF" },
   { name: "Apple TV+", slug: "appletv", color: "FFFFFF" },
-  { name: "Star+", slug: "disneyplus", color: "FFD400" },
+  { name: "Star+", color: "FFD400", img: logoStarPlus },
 ];
+
 
 const devices = [
   { name: "Smart TV", desc: "Samsung, LG, Android TV", icon: Tv },
