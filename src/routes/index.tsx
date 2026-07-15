@@ -323,6 +323,7 @@ const PENDING_KEY = "ultraview_pending_payment";
 function CheckoutDialog({ trigger, planName, priceLabel, checkoutUrl }: { trigger: React.ReactNode; planName: string; priceLabel: string; checkoutUrl: string }) {
   const [open, setOpen] = useState(false);
   const [paid, setPaid] = useState(false);
+  const [showAttendants, setShowAttendants] = useState(false);
   const proofMsg = `Olá! Acabei de realizar o pagamento do plano ${planName} (${priceLabel}) da Ultra View. Segue em anexo o comprovante para liberação do acesso.`;
   const goToCheckout = () => {
     try {
@@ -333,7 +334,8 @@ function CheckoutDialog({ trigger, planName, priceLabel, checkoutUrl }: { trigge
     window.open(checkoutUrl, "_blank", "noopener,noreferrer");
   };
   return (
-    <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) setPaid(false); }}>
+    <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) { setPaid(false); setShowAttendants(false); } }}>
+
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="bg-gradient-to-br from-[#1a0b2e] to-[#0a0118] border-fuchsia-400/30 text-white max-w-lg">
         <DialogHeader>
