@@ -466,7 +466,6 @@ function PendingProofBanner() {
 
 
 function Index() {
-  const trialMsg = "Olá, gostaria de fazer o teste gratuito da Ultra View";
   return (
     <div className="min-h-screen text-white relative overflow-hidden" style={{
       background: "radial-gradient(ellipse at top, #4c1d95 0%, #1e1b4b 35%, #0a0118 70%, #000000 100%)",
