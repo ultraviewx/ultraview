@@ -608,8 +608,7 @@ function Index() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
               {plans.map((p) => {
-                const waMsg = `Olá, gostaria de assinar o plano ${p.name} (${p.price}${p.period}) da Ultra View`;
-                const isTrial = p.name === "Teste Grátis";
+                const isTrial = false;
                 const isCheckout = !!p.checkout;
                 const ctaInner = (
                   <>
