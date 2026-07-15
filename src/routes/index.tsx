@@ -237,37 +237,82 @@ function DeviceCard({ d }: { d: { name: string; desc: string; icon: React.Compon
   );
 }
 
+function AttendantList({ message, onPick }: { message: string; onPick?: () => void }) {
+  return (
+    <div className="space-y-2 mt-2">
+      {attendants.map((a) => (
+        <a
+          key={a.number}
+          href={waLink(a.number, message)}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={onPick}
+          className="flex items-center gap-3 p-4 rounded-xl border border-emerald-400/30 bg-emerald-900/20 hover:bg-emerald-900/40 hover:border-emerald-300/60 hover:scale-[1.02] transition-all"
+        >
+          <span className="relative flex w-3 h-3">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
+            <span className="relative inline-flex rounded-full w-3 h-3 bg-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.9)]" />
+          </span>
+          <span className="flex-1 text-left">
+            <span className="block font-bold text-white">{a.label}</span>
+            <span className="block text-xs text-emerald-200/80">{a.display}</span>
+          </span>
+          <span className="text-[10px] uppercase tracking-wider text-emerald-300 font-bold">Disponível</span>
+        </a>
+      ))}
+    </div>
+  );
+}
+
 function TrialDialog({ trigger }: { trigger: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [device, setDevice] = useState<string | null>(null);
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) setDevice(null); }}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="bg-gradient-to-br from-[#1a0b2e] to-[#0a0118] border-fuchsia-400/30 text-white max-w-2xl">
         <DialogHeader>
-          <DialogTitle className="text-2xl bg-gradient-to-r from-fuchsia-300 to-purple-300 bg-clip-text text-transparent">Em qual aparelho você quer assistir?</DialogTitle>
+          <DialogTitle className="text-2xl bg-gradient-to-r from-fuchsia-300 to-purple-300 bg-clip-text text-transparent">
+            {device ? "Escolha um atendente disponível" : "Em qual aparelho você quer assistir?"}
+          </DialogTitle>
           <DialogDescription className="text-purple-200/80">
-            Escolha seu dispositivo para receber as instruções do teste grátis direto no WhatsApp.
+            {device
+              ? `Um atendente vai te ajudar com o seu ${device} pelo WhatsApp.`
+              : "Escolha seu dispositivo para conversar com um atendente pelo WhatsApp."}
           </DialogDescription>
         </DialogHeader>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">
-          {trialDevices.map((d) => {
-            const Icon = d.icon;
-            const msg = `Olá, gostaria de fazer o teste gratuito da Ultra View no meu ${d.name}.`;
-            return (
-              <a
-                key={d.name}
-                href={waLink(msg)}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setOpen(false)}
-                className="flex flex-col items-center justify-center text-center gap-2 p-4 rounded-xl border border-purple-400/20 bg-purple-900/30 hover:bg-fuchsia-900/40 hover:border-fuchsia-400/60 hover:scale-[1.03] transition-all"
-              >
-                <Icon className="w-7 h-7 text-fuchsia-300" />
-                <span className="text-xs font-semibold text-purple-100 leading-tight">{d.name}</span>
-              </a>
-            );
-          })}
-        </div>
+        {!device ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">
+            {trialDevices.map((d) => {
+              const Icon = d.icon;
+              return (
+                <button
+                  key={d.name}
+                  type="button"
+                  onClick={() => setDevice(d.name)}
+                  className="flex flex-col items-center justify-center text-center gap-2 p-4 rounded-xl border border-purple-400/20 bg-purple-900/30 hover:bg-fuchsia-900/40 hover:border-fuchsia-400/60 hover:scale-[1.03] transition-all"
+                >
+                  <Icon className="w-7 h-7 text-fuchsia-300" />
+                  <span className="text-xs font-semibold text-purple-100 leading-tight">{d.name}</span>
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <>
+            <AttendantList
+              message={`Olá, gostaria de assinar a Ultra View. Vou assistir no meu ${device}.`}
+              onPick={() => setOpen(false)}
+            />
+            <button
+              type="button"
+              onClick={() => setDevice(null)}
+              className="text-xs text-purple-200/70 underline underline-offset-4 hover:text-fuchsia-300 mt-2 text-center"
+            >
+              ← Trocar de aparelho
+            </button>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );
