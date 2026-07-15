@@ -108,7 +108,7 @@ const trialDevices = [
 ];
 
 const plans = [
-  { name: "Teste Grátis", price: "R$ 0", period: "", badge: "Sem cartão", highlight: false, features: ["Acesso completo", "Sem cartão de crédito", "Sem compromisso", "Suporte humanizado"], cta: "Quero o teste grátis", checkout: null },
+  { name: "Diária", price: "R$ 8,99", period: "/dia", badge: "Ideal para testar", highlight: false, features: ["Acesso completo por 24h", "Sem compromisso", "Suporte humanizado"], cta: "Assinar Agora", checkout: "https://mpago.la/23yuvq3" },
   { name: "Mensal", price: "R$ 30", period: "/mês", badge: null, highlight: false, features: ["Todo o catálogo", "Multiplataforma", "Suporte humanizado"], cta: "Assinar Mensal", checkout: "https://mpago.la/2TjzxQE" },
   { name: "Trimestral", price: "R$ 80", period: "/3 meses", badge: null, highlight: false, features: ["Economia garantida", "Sem reajuste", "Suporte humanizado"], cta: "Assinar Trimestral", checkout: "https://mpago.la/2KCSm28" },
   { name: "Semestral", price: "R$ 160", period: "/6 meses", badge: null, highlight: false, features: ["Preço reduzido", "Sem reajuste", "Suporte humanizado"], cta: "Assinar Semestral", checkout: "https://mpago.la/14ByT2Z" },
