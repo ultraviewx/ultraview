@@ -63,9 +63,13 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-const WHATSAPP_NUMBER = "5585991173080";
-const waLink = (msg: string) =>
-  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+type Attendant = { label: string; number: string; display: string };
+const attendants: Attendant[] = [
+  { label: "Atendimento 1", number: "5585991173080", display: "(85) 99117-3080" },
+  { label: "Atendimento 2", number: "5585988340993", display: "(85) 98834-0993" },
+];
+const waLink = (number: string, msg: string) =>
+  `https://wa.me/${number}?text=${encodeURIComponent(msg)}`;
 
 // Streaming logos. `img` overrides the simple-icons CDN slug.
 type Streaming = { name: string; slug?: string; color: string; img?: string; wordmark?: string };
@@ -104,7 +108,7 @@ const trialDevices = [
 ];
 
 const plans = [
-  { name: "Teste Grátis", price: "R$ 0", period: "", badge: "Sem cartão", highlight: false, features: ["Acesso completo", "Sem cartão de crédito", "Sem compromisso", "Suporte humanizado"], cta: "Quero o teste grátis", checkout: null },
+  { name: "Diária", price: "R$ 8,99", period: "/dia", badge: "Ideal para testar", highlight: false, features: ["Acesso completo por 24h", "Sem compromisso", "Suporte humanizado"], cta: "Assinar Agora", checkout: "https://mpago.la/23yuvq3" },
   { name: "Mensal", price: "R$ 30", period: "/mês", badge: null, highlight: false, features: ["Todo o catálogo", "Multiplataforma", "Suporte humanizado"], cta: "Assinar Mensal", checkout: "https://mpago.la/2TjzxQE" },
   { name: "Trimestral", price: "R$ 80", period: "/3 meses", badge: null, highlight: false, features: ["Economia garantida", "Sem reajuste", "Suporte humanizado"], cta: "Assinar Trimestral", checkout: "https://mpago.la/2KCSm28" },
   { name: "Semestral", price: "R$ 160", period: "/6 meses", badge: null, highlight: false, features: ["Preço reduzido", "Sem reajuste", "Suporte humanizado"], cta: "Assinar Semestral", checkout: "https://mpago.la/14ByT2Z" },
@@ -233,37 +237,82 @@ function DeviceCard({ d }: { d: { name: string; desc: string; icon: React.Compon
   );
 }
 
+function AttendantList({ message, onPick }: { message: string; onPick?: () => void }) {
+  return (
+    <div className="space-y-2 mt-2">
+      {attendants.map((a) => (
+        <a
+          key={a.number}
+          href={waLink(a.number, message)}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={onPick}
+          className="flex items-center gap-3 p-4 rounded-xl border border-emerald-400/30 bg-emerald-900/20 hover:bg-emerald-900/40 hover:border-emerald-300/60 hover:scale-[1.02] transition-all"
+        >
+          <span className="relative flex w-3 h-3">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
+            <span className="relative inline-flex rounded-full w-3 h-3 bg-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.9)]" />
+          </span>
+          <span className="flex-1 text-left">
+            <span className="block font-bold text-white">{a.label}</span>
+            <span className="block text-xs text-emerald-200/80">{a.display}</span>
+          </span>
+          <span className="text-[10px] uppercase tracking-wider text-emerald-300 font-bold">Disponível</span>
+        </a>
+      ))}
+    </div>
+  );
+}
+
 function TrialDialog({ trigger }: { trigger: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [device, setDevice] = useState<string | null>(null);
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) setDevice(null); }}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="bg-gradient-to-br from-[#1a0b2e] to-[#0a0118] border-fuchsia-400/30 text-white max-w-2xl">
         <DialogHeader>
-          <DialogTitle className="text-2xl bg-gradient-to-r from-fuchsia-300 to-purple-300 bg-clip-text text-transparent">Em qual aparelho você quer assistir?</DialogTitle>
+          <DialogTitle className="text-2xl bg-gradient-to-r from-fuchsia-300 to-purple-300 bg-clip-text text-transparent">
+            {device ? "Escolha um atendente disponível" : "Em qual aparelho você quer assistir?"}
+          </DialogTitle>
           <DialogDescription className="text-purple-200/80">
-            Escolha seu dispositivo para receber as instruções do teste grátis direto no WhatsApp.
+            {device
+              ? `Um atendente vai te ajudar com o seu ${device} pelo WhatsApp.`
+              : "Escolha seu dispositivo para conversar com um atendente pelo WhatsApp."}
           </DialogDescription>
         </DialogHeader>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">
-          {trialDevices.map((d) => {
-            const Icon = d.icon;
-            const msg = `Olá, gostaria de fazer o teste gratuito da Ultra View no meu ${d.name}.`;
-            return (
-              <a
-                key={d.name}
-                href={waLink(msg)}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setOpen(false)}
-                className="flex flex-col items-center justify-center text-center gap-2 p-4 rounded-xl border border-purple-400/20 bg-purple-900/30 hover:bg-fuchsia-900/40 hover:border-fuchsia-400/60 hover:scale-[1.03] transition-all"
-              >
-                <Icon className="w-7 h-7 text-fuchsia-300" />
-                <span className="text-xs font-semibold text-purple-100 leading-tight">{d.name}</span>
-              </a>
-            );
-          })}
-        </div>
+        {!device ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">
+            {trialDevices.map((d) => {
+              const Icon = d.icon;
+              return (
+                <button
+                  key={d.name}
+                  type="button"
+                  onClick={() => setDevice(d.name)}
+                  className="flex flex-col items-center justify-center text-center gap-2 p-4 rounded-xl border border-purple-400/20 bg-purple-900/30 hover:bg-fuchsia-900/40 hover:border-fuchsia-400/60 hover:scale-[1.03] transition-all"
+                >
+                  <Icon className="w-7 h-7 text-fuchsia-300" />
+                  <span className="text-xs font-semibold text-purple-100 leading-tight">{d.name}</span>
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <>
+            <AttendantList
+              message={`Olá, gostaria de assinar a Ultra View. Vou assistir no meu ${device}.`}
+              onPick={() => setOpen(false)}
+            />
+            <button
+              type="button"
+              onClick={() => setDevice(null)}
+              className="text-xs text-purple-200/70 underline underline-offset-4 hover:text-fuchsia-300 mt-2 text-center"
+            >
+              ← Trocar de aparelho
+            </button>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );
@@ -274,6 +323,7 @@ const PENDING_KEY = "ultraview_pending_payment";
 function CheckoutDialog({ trigger, planName, priceLabel, checkoutUrl }: { trigger: React.ReactNode; planName: string; priceLabel: string; checkoutUrl: string }) {
   const [open, setOpen] = useState(false);
   const [paid, setPaid] = useState(false);
+  const [showAttendants, setShowAttendants] = useState(false);
   const proofMsg = `Olá! Acabei de realizar o pagamento do plano ${planName} (${priceLabel}) da Ultra View. Segue em anexo o comprovante para liberação do acesso.`;
   const goToCheckout = () => {
     try {
@@ -284,7 +334,8 @@ function CheckoutDialog({ trigger, planName, priceLabel, checkoutUrl }: { trigge
     window.open(checkoutUrl, "_blank", "noopener,noreferrer");
   };
   return (
-    <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) setPaid(false); }}>
+    <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) { setPaid(false); setShowAttendants(false); } }}>
+
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="bg-gradient-to-br from-[#1a0b2e] to-[#0a0118] border-fuchsia-400/30 text-white max-w-lg">
         <DialogHeader>
@@ -316,16 +367,24 @@ function CheckoutDialog({ trigger, planName, priceLabel, checkoutUrl }: { trigge
               <Zap className="w-4 h-4" /> Ir para o checkout
             </button>
           )}
-          <a
-            href={waLink(proofMsg)}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => { try { localStorage.removeItem(PENDING_KEY); window.dispatchEvent(new Event("ultraview-pending")); } catch {} }}
-            className={`w-full inline-flex items-center justify-center gap-2 py-3 rounded-full font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 shadow-lg shadow-emerald-900/40 transition-all hover:scale-[1.02] ${paid ? "ring-2 ring-emerald-300/70 animate-pulse" : ""}`}
-          >
-            <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-            {paid ? "Já paguei — Enviar comprovante agora" : "Já paguei — Enviar comprovante"}
-          </a>
+          {!showAttendants ? (
+            <button
+              type="button"
+              onClick={() => setShowAttendants(true)}
+              className={`w-full inline-flex items-center justify-center gap-2 py-3 rounded-full font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 shadow-lg shadow-emerald-900/40 transition-all hover:scale-[1.02] ${paid ? "ring-2 ring-emerald-300/70 animate-pulse" : ""}`}
+            >
+              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+              {paid ? "Já paguei — Enviar comprovante agora" : "Já paguei — Enviar comprovante"}
+            </button>
+          ) : (
+            <div className="rounded-xl border border-emerald-400/30 bg-emerald-950/30 p-3">
+              <p className="text-sm text-emerald-200 font-bold text-center mb-1">Escolha um atendente disponível</p>
+              <AttendantList
+                message={proofMsg}
+                onPick={() => { try { localStorage.removeItem(PENDING_KEY); window.dispatchEvent(new Event("ultraview-pending")); } catch {} setOpen(false); }}
+              />
+            </div>
+          )}
           {paid && (
             <button
               type="button"
@@ -379,16 +438,24 @@ function PendingProofBanner() {
             Já pagou o plano {pending.planName}? Envie o comprovante para liberarmos o acesso.
           </div>
         </div>
-        <a
-          href={waLink(proofMsg)}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={dismiss}
-          className="shrink-0 inline-flex items-center gap-2 py-2.5 px-4 rounded-full font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 shadow-lg transition-all hover:scale-[1.04]"
-        >
-          <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-          Enviar comprovante
-        </a>
+        <Dialog>
+          <DialogTrigger asChild>
+            <button
+              type="button"
+              className="shrink-0 inline-flex items-center gap-2 py-2.5 px-4 rounded-full font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 shadow-lg transition-all hover:scale-[1.04]"
+            >
+              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+              Enviar comprovante
+            </button>
+          </DialogTrigger>
+          <DialogContent className="bg-gradient-to-br from-[#1a0b2e] to-[#0a0118] border-emerald-400/30 text-white max-w-md">
+            <DialogHeader>
+              <DialogTitle className="text-2xl bg-gradient-to-r from-emerald-300 to-green-300 bg-clip-text text-transparent">Escolha um atendente disponível</DialogTitle>
+              <DialogDescription className="text-purple-200/80">Envie seu comprovante para liberarmos o acesso.</DialogDescription>
+            </DialogHeader>
+            <AttendantList message={proofMsg} onPick={dismiss} />
+          </DialogContent>
+        </Dialog>
         <button onClick={dismiss} aria-label="Fechar" className="shrink-0 text-purple-200/70 hover:text-white p-1">
           <X className="w-4 h-4" />
         </button>
@@ -399,7 +466,6 @@ function PendingProofBanner() {
 
 
 function Index() {
-  const trialMsg = "Olá, gostaria de fazer o teste gratuito da Ultra View";
   return (
     <div className="min-h-screen text-white relative overflow-hidden" style={{
       background: "radial-gradient(ellipse at top, #4c1d95 0%, #1e1b4b 35%, #0a0118 70%, #000000 100%)",
@@ -443,16 +509,20 @@ function Index() {
             Tudo o que você ama assistir em um único aplicativo.
           </h1>
           <p className="relative mt-6 text-purple-100/90 max-w-2xl text-base sm:text-lg">
-            Filmes, séries, animes, doramas, esportes e mais de <span className="text-fuchsia-300 font-bold">1500 canais ao vivo</span>. Sem antena, sem instalação. Teste grátis agora.
+            Filmes, séries, animes, doramas, esportes e mais de <span className="text-fuchsia-300 font-bold">1500 canais ao vivo</span>. Sem antena, sem instalação. Assine agora a partir de <span className="text-fuchsia-300 font-bold">R$ 8,99/dia</span>.
           </p>
           <div className="relative mt-10 flex flex-col sm:flex-row gap-4 items-center">
-            <TrialDialog trigger={
-              <button className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 transition-all shadow-[0_0_30px_rgba(34,197,94,0.6)] hover:scale-105">
-                <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                Teste Grátis Agora
-              </button>
-            } />
-            <a href="#planos" className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-white bg-gradient-to-r from-fuchsia-600 to-purple-700 hover:from-fuchsia-500 hover:to-purple-600 transition-all shadow-[0_0_30px_rgba(217,70,239,0.6)] hover:scale-105">
+            <CheckoutDialog
+              planName="Diária"
+              priceLabel="R$ 8,99/dia"
+              checkoutUrl="https://mpago.la/23yuvq3"
+              trigger={
+                <button className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-white bg-gradient-to-r from-fuchsia-600 to-purple-700 hover:from-fuchsia-500 hover:to-purple-600 transition-all shadow-[0_0_30px_rgba(217,70,239,0.6)] hover:scale-105">
+                  <Zap className="w-5 h-5" /> Assinar Agora
+                </button>
+              }
+            />
+            <a href="#planos" className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-white bg-purple-900/40 border border-fuchsia-400/40 hover:bg-purple-900/60 transition-all hover:scale-105">
               Ver Planos <Zap className="w-5 h-5" />
             </a>
           </div>
@@ -541,8 +611,7 @@ function Index() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
               {plans.map((p) => {
-                const waMsg = `Olá, gostaria de assinar o plano ${p.name} (${p.price}${p.period}) da Ultra View`;
-                const isTrial = p.name === "Teste Grátis";
+                const isTrial = false;
                 const isCheckout = !!p.checkout;
                 const ctaInner = (
                   <>
@@ -585,14 +654,14 @@ function Index() {
                         trigger={<button className={ctaClass}>{ctaInner}</button>}
                       />
                     ) : (
-                      <a href={waLink(waMsg)} target="_blank" rel="noopener noreferrer" className={ctaClass}>{ctaInner}</a>
+                      <TrialDialog trigger={<button className={ctaClass}>{ctaInner}</button>} />
                     )}
                   </div>
                 );
               })}
             </div>
             <p className="text-center text-purple-200/60 text-sm mt-8">
-              💬 Atendimento direto pelo WhatsApp: <span className="text-fuchsia-300 font-bold">(85) 99117-3080</span>
+              💬 Atendimento humanizado pelo WhatsApp — <span className="text-fuchsia-300 font-bold">2 atendentes disponíveis</span>
             </p>
           </div>
         </section>
@@ -601,15 +670,17 @@ function Index() {
         <PendingProofBanner />
 
         {/* FLOATING WHATSAPP BUTTON */}
-        <a
-          href={waLink(trialMsg)}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Fale conosco no WhatsApp"
-          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.6)] hover:scale-110 transition-transform animate-pulse"
-        >
-          <svg viewBox="0 0 24 24" className="w-7 h-7 fill-white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-        </a>
+        <TrialDialog
+          trigger={
+            <button
+              type="button"
+              aria-label="Fale conosco no WhatsApp"
+              className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.6)] hover:scale-110 transition-transform animate-pulse"
+            >
+              <svg viewBox="0 0 24 24" className="w-7 h-7 fill-white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            </button>
+          }
+        />
 
         {/* FOOTER */}
         <footer className="py-12 px-4 border-t border-purple-500/20 text-center">
