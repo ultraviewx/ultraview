@@ -652,7 +652,7 @@ function Index() {
                         trigger={<button className={ctaClass}>{ctaInner}</button>}
                       />
                     ) : (
-                      <a href={waLink(waMsg)} target="_blank" rel="noopener noreferrer" className={ctaClass}>{ctaInner}</a>
+                      <TrialDialog trigger={<button className={ctaClass}>{ctaInner}</button>} />
                     )}
                   </div>
                 );
