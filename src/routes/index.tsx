@@ -107,8 +107,10 @@ const trialDevices = [
   { name: "Outro / não sei", icon: Tv },
 ];
 
-const plans = [
-  { name: "Diária", price: "R$ 8,99", period: "/dia", badge: "Ideal para testar", highlight: false, features: ["Acesso completo por 24h", "Sem compromisso", "Suporte humanizado"], cta: "Assinar Agora", checkout: "https://mpago.la/23yuvq3" },
+type Plan = { name: string; price: string; period: string; badge: string | null; highlight: boolean; features: string[]; cta: string; checkout?: string };
+const plans: Plan[] = [
+  { name: "Teste Grátis", price: "Grátis", period: "", badge: "Experimente sem pagar", highlight: false, features: ["Teste antes de assinar", "Escolha seu dispositivo", "Atendimento humanizado"], cta: "Teste Grátis Agora" },
+  { name: "Diária", price: "R$ 8,99", period: "/dia", badge: null, highlight: false, features: ["Acesso completo por 24h", "Sem compromisso", "Suporte humanizado"], cta: "Assinar Diária", checkout: "https://mpago.la/23yuvq3" },
   { name: "Mensal", price: "R$ 30", period: "/mês", badge: null, highlight: false, features: ["Todo o catálogo", "Multiplataforma", "Suporte humanizado"], cta: "Assinar Mensal", checkout: "https://mpago.la/2TjzxQE" },
   { name: "Trimestral", price: "R$ 80", period: "/3 meses", badge: null, highlight: false, features: ["Economia garantida", "Sem reajuste", "Suporte humanizado"], cta: "Assinar Trimestral", checkout: "https://mpago.la/2KCSm28" },
   { name: "Semestral", price: "R$ 160", period: "/6 meses", badge: null, highlight: false, features: ["Preço reduzido", "Sem reajuste", "Suporte humanizado"], cta: "Assinar Semestral", checkout: "https://mpago.la/14ByT2Z" },
@@ -513,9 +515,9 @@ function Index() {
           </p>
           <div className="relative mt-10 flex flex-col sm:flex-row gap-4 items-center">
             <CheckoutDialog
-              planName="Diária"
-              priceLabel="R$ 8,99/dia"
-              checkoutUrl="https://mpago.la/23yuvq3"
+              planName="Mensal"
+              priceLabel="R$ 30/mês"
+              checkoutUrl="https://mpago.la/2TjzxQE"
               trigger={
                 <button className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-white bg-gradient-to-r from-fuchsia-600 to-purple-700 hover:from-fuchsia-500 hover:to-purple-600 transition-all shadow-[0_0_30px_rgba(217,70,239,0.6)] hover:scale-105">
                   <Zap className="w-5 h-5" /> Assinar Agora
@@ -609,10 +611,10 @@ function Index() {
               <h2 className="text-3xl sm:text-4xl font-extrabold mb-4 bg-gradient-to-r from-fuchsia-300 to-purple-300 bg-clip-text text-transparent">PLANOS QUE CABEM NO BOLSO</h2>
               <p className="text-purple-200/80">Acesso completo a todo o conteúdo. Cancele quando quiser. Suporte 100% humanizado pelo WhatsApp.</p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
               {plans.map((p) => {
-                const isTrial = false;
                 const isCheckout = !!p.checkout;
+                const isTrial = !isCheckout;
                 const ctaInner = (
                   <>
                     {isCheckout ? (
