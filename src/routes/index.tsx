@@ -239,32 +239,6 @@ function DeviceCard({ d }: { d: { name: string; desc: string; icon: React.Compon
   );
 }
 
-function AttendantList({ message, onPick }: { message: string; onPick?: () => void }) {
-  return (
-    <div className="space-y-2 mt-2">
-      {attendants.map((a) => (
-        <a
-          key={a.number}
-          href={waLink(a.number, message)}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={onPick}
-          className="flex items-center gap-3 p-4 rounded-xl border border-emerald-400/30 bg-emerald-900/20 hover:bg-emerald-900/40 hover:border-emerald-300/60 hover:scale-[1.02] transition-all"
-        >
-          <span className="relative flex w-3 h-3">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
-            <span className="relative inline-flex rounded-full w-3 h-3 bg-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.9)]" />
-          </span>
-          <span className="flex-1 text-left">
-            <span className="block font-bold text-white">{a.label}</span>
-            <span className="block text-xs text-emerald-200/80">{a.display}</span>
-          </span>
-          <span className="text-[10px] uppercase tracking-wider text-emerald-300 font-bold">Disponível</span>
-        </a>
-      ))}
-    </div>
-  );
-}
 
 function TrialDialog({ trigger }: { trigger: React.ReactNode }) {
   const [open, setOpen] = useState(false);
