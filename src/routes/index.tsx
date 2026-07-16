@@ -588,7 +588,7 @@ function Index() {
               <h2 className="text-3xl sm:text-4xl font-extrabold mb-4 bg-gradient-to-r from-fuchsia-300 to-purple-300 bg-clip-text text-transparent">PLANOS QUE CABEM NO BOLSO</h2>
               <p className="text-purple-200/80">Acesso completo a todo o conteúdo. Cancele quando quiser. Suporte 100% humanizado pelo WhatsApp.</p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               {plans.map((p) => {
                 const isCheckout = !!p.checkout;
                 const isTrial = !isCheckout;
