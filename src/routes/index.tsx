@@ -68,6 +68,7 @@ const attendants: Attendant[] = [
   { label: "Atendimento 1", number: "5585991173080", display: "(85) 99117-3080" },
   { label: "Atendimento 2", number: "5585988340993", display: "(85) 98834-0993" },
 ];
+const pickAttendant = (): Attendant => attendants[Math.floor(Math.random() * attendants.length)];
 const waLink = (number: string, msg: string) =>
   `https://wa.me/${number}?text=${encodeURIComponent(msg)}`;
 
