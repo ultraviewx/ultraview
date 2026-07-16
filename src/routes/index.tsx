@@ -515,9 +515,9 @@ function Index() {
           </p>
           <div className="relative mt-10 flex flex-col sm:flex-row gap-4 items-center">
             <CheckoutDialog
-              planName="Diária"
-              priceLabel="R$ 8,99/dia"
-              checkoutUrl="https://mpago.la/23yuvq3"
+              planName="Mensal"
+              priceLabel="R$ 30/mês"
+              checkoutUrl="https://mpago.la/2TjzxQE"
               trigger={
                 <button className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-white bg-gradient-to-r from-fuchsia-600 to-purple-700 hover:from-fuchsia-500 hover:to-purple-600 transition-all shadow-[0_0_30px_rgba(217,70,239,0.6)] hover:scale-105">
                   <Zap className="w-5 h-5" /> Assinar Agora
