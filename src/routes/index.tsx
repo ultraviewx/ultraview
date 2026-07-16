@@ -488,7 +488,7 @@ function Index() {
             Tudo o que você ama assistir em um único aplicativo.
           </h1>
           <p className="relative mt-6 text-purple-100/90 max-w-2xl text-base sm:text-lg">
-            Filmes, séries, animes, doramas, esportes e mais de <span className="text-fuchsia-300 font-bold">1500 canais ao vivo</span>. Sem antena, sem instalação. Assine agora a partir de <span className="text-fuchsia-300 font-bold">R$ 8,99/dia</span>.
+            Filmes, séries, animes, doramas, esportes e mais de <span className="text-fuchsia-300 font-bold">1500 canais ao vivo</span>. Sem antena, sem instalação. Assine agora a partir de <span className="text-fuchsia-300 font-bold">R$ 30/mês</span>.
           </p>
           <div className="relative mt-10 flex flex-col sm:flex-row gap-4 items-center">
             <CheckoutDialog
