@@ -630,7 +630,7 @@ function Index() {
               })}
             </div>
             <p className="text-center text-purple-200/60 text-sm mt-8">
-              💬 Atendimento humanizado pelo WhatsApp — <span className="text-fuchsia-300 font-bold">2 atendentes disponíveis</span>
+              💬 Atendimento humanizado pelo WhatsApp — <span className="text-fuchsia-300 font-bold">(85) 98834-0993</span>
             </p>
           </div>
         </section>
