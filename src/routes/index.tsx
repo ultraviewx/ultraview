@@ -63,14 +63,9 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-type Attendant = { label: string; number: string; display: string };
-const attendants: Attendant[] = [
-  { label: "Atendimento 1", number: "5585991173080", display: "(85) 99117-3080" },
-  { label: "Atendimento 2", number: "5585988340993", display: "(85) 98834-0993" },
-];
-const pickAttendant = (): Attendant => attendants[Math.floor(Math.random() * attendants.length)];
-const waLink = (number: string, msg: string) =>
-  `https://wa.me/${number}?text=${encodeURIComponent(msg)}`;
+const WHATSAPP_NUMBER = "5585988340993";
+const waLink = (msg: string) =>
+  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
 // Streaming logos. `img` overrides the simple-icons CDN slug.
 type Streaming = { name: string; slug?: string; color: string; img?: string; wordmark?: string };
