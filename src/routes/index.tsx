@@ -311,12 +311,11 @@ function CheckoutDialog({ trigger, planName, priceLabel, checkoutUrl }: { trigge
     window.open(checkoutUrl, "_blank", "noopener,noreferrer");
   };
   const sendProof = () => {
-    const a = pickAttendant();
     try {
       localStorage.removeItem(PENDING_KEY);
       window.dispatchEvent(new Event("ultraview-pending"));
     } catch {}
-    window.open(waLink(a.number, proofMsg), "_blank", "noopener,noreferrer");
+    window.open(waLink(proofMsg), "_blank", "noopener,noreferrer");
     setOpen(false);
   };
   return (
