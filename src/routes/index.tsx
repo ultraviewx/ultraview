@@ -405,8 +405,7 @@ function PendingProofBanner() {
     setPending(null);
   };
   const sendProof = () => {
-    const a = pickAttendant();
-    window.open(waLink(a.number, proofMsg), "_blank", "noopener,noreferrer");
+    window.open(waLink(proofMsg), "_blank", "noopener,noreferrer");
     dismiss();
   };
   return (
