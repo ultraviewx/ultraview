@@ -63,7 +63,7 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-const WHATSAPP_NUMBER = "5585988340993";
+const WHATSAPP_NUMBER = "5585991173080";
 const waLink = (msg: string) =>
   `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
@@ -630,7 +630,7 @@ function Index() {
               })}
             </div>
             <p className="text-center text-purple-200/60 text-sm mt-8">
-              💬 Atendimento humanizado pelo WhatsApp — <span className="text-fuchsia-300 font-bold">(85) 98834-0993</span>
+              💬 Atendimento humanizado pelo WhatsApp — <span className="text-fuchsia-300 font-bold">(85) 99117-3080</span>
             </p>
           </div>
         </section>
