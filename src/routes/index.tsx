@@ -18,6 +18,8 @@ import { AmbientBackground } from "@/components/uv/ambient-background";
 import { SiteHeader } from "@/components/uv/site-header";
 import { CatalogRow, StreamingLogo, catalog, liveBanner, streamings } from "@/components/uv/catalog";
 import { TestimonialSlider } from "@/components/uv/testimonials";
+import { DemoVideo } from "@/components/uv/demo-video";
+
 import {
   CheckoutDialog,
   PendingProofBanner,
@@ -201,9 +203,10 @@ function Hero() {
                   </button>
                 }
               />
-              <a href="#catalogo" className="btn-ghost-glass text-sm uppercase tracking-wider">
+              <a href="#como-funciona" className="btn-ghost-glass text-sm uppercase tracking-wider">
                 <PlayCircle className="h-4 w-4" /> Ver Demonstração
               </a>
+
             </div>
           </Reveal>
 
@@ -342,11 +345,22 @@ function HowItWorks() {
     <section id="como-funciona" className="section-space px-4 sm:px-6">
       <div className="mx-auto max-w-5xl">
         <SectionHeading
-          eyebrow="Como funciona"
-          title="Do primeiro clique ao play em poucos minutos"
-          subtitle="Quatro passos, sem burocracia e com acompanhamento humano em cada etapa."
+          eyebrow="Veja funcionando"
+          title="Conheça o app antes de assinar"
+          subtitle="Uma demonstração real da navegação, do catálogo e da qualidade de reprodução."
         />
+        <div className="mt-12">
+          <DemoVideo />
+        </div>
+        <div className="mt-24">
+          <SectionHeading
+            eyebrow="Como funciona"
+            title="Do primeiro clique ao play em poucos minutos"
+            subtitle="Quatro passos, sem burocracia e com acompanhamento humano em cada etapa."
+          />
+        </div>
         <ol className="relative mt-16 space-y-8 before:absolute before:left-6 before:top-2 before:h-[calc(100%-2rem)] before:w-px before:bg-gradient-to-b before:from-primary before:via-accent before:to-transparent sm:before:left-1/2">
+
           {steps.map((s, i) => (
             <Reveal
               key={s.n}
