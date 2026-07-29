@@ -18,6 +18,8 @@ import { AmbientBackground } from "@/components/uv/ambient-background";
 import { SiteHeader } from "@/components/uv/site-header";
 import { CatalogRow, StreamingLogo, catalog, liveBanner, streamings } from "@/components/uv/catalog";
 import { TestimonialSlider } from "@/components/uv/testimonials";
+import { DemoVideo } from "@/components/uv/demo-video";
+
 import {
   CheckoutDialog,
   PendingProofBanner,
