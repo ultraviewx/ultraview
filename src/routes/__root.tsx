@@ -10,6 +10,11 @@ import {
 
 import appCss from "../styles.css?url";
 
+const SITE_URL = "https://ultraview.lovable.app";
+const SITE_TITLE = "Ultra View | Entretenimento premium em qualquer tela";
+const SITE_DESCRIPTION =
+  "Ultra View reúne filmes, séries, animes, doramas e canais ao vivo em uma experiência moderna, compatível com Smart TV, celular, TV Box e computador.";
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -72,18 +77,33 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Ultra View" },
-      { name: "description", content: "Create custom landing pages with your branding, galaxy themes, and personalized content layouts." },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Ultra View" },
-      { property: "og:description", content: "Create custom landing pages with your branding, galaxy themes, and personalized content layouts." },
+      { title: SITE_TITLE },
+      { name: "description", content: SITE_DESCRIPTION },
+      { name: "author", content: "Ultra View" },
+      { property: "og:site_name", content: "Ultra View" },
+      { property: "og:title", content: SITE_TITLE },
+      { property: "og:description", content: SITE_DESCRIPTION },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Ultra View" },
-      { name: "twitter:description", content: "Create custom landing pages with your branding, galaxy themes, and personalized content layouts." },
+      { property: "og:url", content: SITE_URL },
+      { property: "og:locale", content: "pt_BR" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: SITE_TITLE },
+      { name: "twitter:description", content: SITE_DESCRIPTION },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/REIWjIBTI1Un59w1mUo4jGOP8E22/social-images/social-1779788612340-photo_2026-05-26_11-32-06.webp" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/REIWjIBTI1Un59w1mUo4jGOP8E22/social-images/social-1779788612340-photo_2026-05-26_11-32-06.webp" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Ultra View",
+          url: SITE_URL,
+          description: SITE_DESCRIPTION,
+          inLanguage: "pt-BR",
+        }),
+      },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
