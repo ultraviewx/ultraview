@@ -201,9 +201,10 @@ function Hero() {
                   </button>
                 }
               />
-              <a href="#catalogo" className="btn-ghost-glass text-sm uppercase tracking-wider">
+              <a href="#como-funciona" className="btn-ghost-glass text-sm uppercase tracking-wider">
                 <PlayCircle className="h-4 w-4" /> Ver Demonstração
               </a>
+
             </div>
           </Reveal>
 
