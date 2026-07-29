@@ -10,6 +10,11 @@ import {
 
 import appCss from "../styles.css?url";
 
+const SITE_URL = "https://ultraview.lovable.app";
+const SITE_TITLE = "Ultra View | Entretenimento premium em qualquer tela";
+const SITE_DESCRIPTION =
+  "Ultra View reúne filmes, séries, animes, doramas e canais ao vivo em uma experiência moderna, compatível com Smart TV, celular, TV Box e computador.";
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
