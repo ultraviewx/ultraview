@@ -13,8 +13,14 @@ export function DemoVideo() {
     const v = ref.current;
     if (!v) return;
     if (v.paused) {
-      void v.play();
-      setPlaying(true);
+      v.play()
+        .then(() => setPlaying(true))
+        .catch(() => {
+          // autoplay policy: force muted playback as fallback
+          v.muted = true;
+          setMuted(true);
+          void v.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+        });
     } else {
       v.pause();
       setPlaying(false);
@@ -39,8 +45,7 @@ export function DemoVideo() {
             loop
             muted={muted}
             preload="metadata"
-            crossOrigin="anonymous"
-            poster={undefined}
+
             onClick={toggle}
             onPlay={() => setPlaying(true)}
             onPause={() => setPlaying(false)}
