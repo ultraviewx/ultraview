@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   ArrowRight,
   Check,
@@ -161,13 +162,17 @@ function SectionHeading({
 
 function Hero() {
   const ref = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
+  const reduced = useReducedMotion();
+  const still = isMobile || reduced;
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const yFar = useTransform(scrollYProgress, [0, 1], [0, 120]);
-  const yNear = useTransform(scrollYProgress, [0, 1], [0, -80]);
-  const fade = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const yFar = useTransform(scrollYProgress, [0, 1], still ? [0, 0] : [0, 120]);
+  const yNear = useTransform(scrollYProgress, [0, 1], still ? [0, 0] : [0, -80]);
+  const fade = useTransform(scrollYProgress, [0, 0.8], still ? [1, 1] : [1, 0]);
 
   return (
-    <section id="inicio" ref={ref} className="relative overflow-hidden pb-20 pt-32 sm:pt-40">
+    <section id="inicio" ref={ref} className="relative pb-4 pt-32 sm:pb-16 sm:pt-40">
+
       <div className="mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:gap-10">
         <motion.div style={{ y: yNear, opacity: fade }} className="min-w-0">
           <Reveal from="left">
@@ -219,7 +224,7 @@ function Hero() {
         </motion.div>
 
         {/* Mockups */}
-        <motion.div style={{ y: yFar }} className="relative mx-auto w-full max-w-xl">
+        <motion.div style={{ y: yFar }} className="relative mx-auto mb-8 w-full max-w-xl sm:mb-6 lg:mb-0">
           <div className="absolute inset-x-6 top-10 -z-10 h-72 rounded-full bg-primary/30 blur-[110px]" />
           <div className="absolute inset-x-16 bottom-0 -z-10 h-52 rounded-full bg-accent/30 blur-[100px]" />
 
@@ -285,7 +290,7 @@ function Hero() {
 
 function TrustBar() {
   return (
-    <section className="relative px-4 pt-24 sm:px-6">
+    <section className="relative px-4 pt-12 sm:px-6 sm:pt-24">
       <Reveal className="mx-auto max-w-7xl">
         <ul className="glass-card grid grid-cols-2 gap-px overflow-hidden rounded-3xl sm:grid-cols-3 lg:grid-cols-6">
           {trustItems.map((t) => (
