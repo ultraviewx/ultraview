@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
 import { motion } from "motion/react";
 import { Play, Pause, Volume2, VolumeX } from "lucide-react";
-import demoAsset from "@/assets/video/demo.mp4.asset.json";
+
+const DEMO_VIDEO_SRC = "/demo.mp4";
 
 export function DemoVideo() {
   const ref = useRef<HTMLVideoElement>(null);
@@ -12,8 +13,14 @@ export function DemoVideo() {
     const v = ref.current;
     if (!v) return;
     if (v.paused) {
-      void v.play();
-      setPlaying(true);
+      v.play()
+        .then(() => setPlaying(true))
+        .catch(() => {
+          // autoplay policy: force muted playback as fallback
+          v.muted = true;
+          setMuted(true);
+          void v.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+        });
     } else {
       v.pause();
       setPlaying(false);
@@ -33,16 +40,18 @@ export function DemoVideo() {
         <div className="relative overflow-hidden rounded-2xl bg-black">
           <video
             ref={ref}
-            src={demoAsset.url}
             className="aspect-video h-auto w-full object-cover"
             playsInline
             loop
             muted={muted}
             preload="metadata"
+
             onClick={toggle}
             onPlay={() => setPlaying(true)}
             onPause={() => setPlaying(false)}
-          />
+          >
+            <source src={DEMO_VIDEO_SRC} type="video/mp4" />
+          </video>
 
           {!playing && (
             <button
