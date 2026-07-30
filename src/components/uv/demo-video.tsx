@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
 import { motion } from "motion/react";
 import { Play, Pause, Volume2, VolumeX } from "lucide-react";
-import demoAsset from "@/assets/video/demo.mp4.asset.json";
+
+const DEMO_VIDEO_SRC = "/demo.mp4";
 
 export function DemoVideo() {
   const ref = useRef<HTMLVideoElement>(null);
@@ -33,16 +34,19 @@ export function DemoVideo() {
         <div className="relative overflow-hidden rounded-2xl bg-black">
           <video
             ref={ref}
-            src={demoAsset.url}
             className="aspect-video h-auto w-full object-cover"
             playsInline
             loop
             muted={muted}
             preload="metadata"
+            crossOrigin="anonymous"
+            poster={undefined}
             onClick={toggle}
             onPlay={() => setPlaying(true)}
             onPause={() => setPlaying(false)}
-          />
+          >
+            <source src={DEMO_VIDEO_SRC} type="video/mp4" />
+          </video>
 
           {!playing && (
             <button
