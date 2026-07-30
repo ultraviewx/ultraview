@@ -171,7 +171,7 @@ function Hero() {
   const fade = useTransform(scrollYProgress, [0, 0.8], still ? [1, 1] : [1, 0]);
 
   return (
-    <section id="inicio" ref={ref} className="relative pb-28 pt-32 sm:pt-40">
+    <section id="inicio" ref={ref} className="relative pb-4 pt-32 sm:pb-16 sm:pt-40">
 
       <div className="mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:gap-10">
         <motion.div style={{ y: yNear, opacity: fade }} className="min-w-0">
@@ -290,7 +290,7 @@ function Hero() {
 
 function TrustBar() {
   return (
-    <section className="relative px-4 pt-24 sm:px-6">
+    <section className="relative px-4 pt-12 sm:px-6 sm:pt-24">
       <Reveal className="mx-auto max-w-7xl">
         <ul className="glass-card grid grid-cols-2 gap-px overflow-hidden rounded-3xl sm:grid-cols-3 lg:grid-cols-6">
           {trustItems.map((t) => (
