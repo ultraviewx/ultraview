@@ -224,7 +224,7 @@ function Hero() {
         </motion.div>
 
         {/* Mockups */}
-        <motion.div style={{ y: yFar }} className="relative mx-auto mb-16 w-full max-w-xl sm:mb-6 lg:mb-0">
+        <motion.div style={{ y: yFar }} className="relative mx-auto mb-8 w-full max-w-xl sm:mb-6 lg:mb-0">
           <div className="absolute inset-x-6 top-10 -z-10 h-72 rounded-full bg-primary/30 blur-[110px]" />
           <div className="absolute inset-x-16 bottom-0 -z-10 h-52 rounded-full bg-accent/30 blur-[100px]" />
 
