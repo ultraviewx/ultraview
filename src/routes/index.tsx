@@ -161,13 +161,17 @@ function SectionHeading({
 
 function Hero() {
   const ref = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
+  const reduced = useReducedMotion();
+  const still = isMobile || reduced;
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const yFar = useTransform(scrollYProgress, [0, 1], [0, 120]);
-  const yNear = useTransform(scrollYProgress, [0, 1], [0, -80]);
-  const fade = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const yFar = useTransform(scrollYProgress, [0, 1], still ? [0, 0] : [0, 120]);
+  const yNear = useTransform(scrollYProgress, [0, 1], still ? [0, 0] : [0, -80]);
+  const fade = useTransform(scrollYProgress, [0, 0.8], still ? [1, 1] : [1, 0]);
 
   return (
-    <section id="inicio" ref={ref} className="relative overflow-hidden pb-20 pt-32 sm:pt-40">
+    <section id="inicio" ref={ref} className="relative pb-28 pt-32 sm:pt-40">
+
       <div className="mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:gap-10">
         <motion.div style={{ y: yNear, opacity: fade }} className="min-w-0">
           <Reveal from="left">
