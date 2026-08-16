@@ -110,16 +110,31 @@ export type Plan = {
   highlight: boolean;
   features: string[];
   cta: string;
-  checkout?: string;
+  /** Valor em reais para gerar o PIX. Ausente = teste grátis (WhatsApp). */
+  amount?: number;
 };
 
 export const plans: Plan[] = [
-  { name: "Teste Grátis", price: "Grátis", period: "", badge: "Experimente sem pagar", highlight: false, features: ["Teste antes de assinar", "Escolha seu dispositivo", "Atendimento humanizado"], cta: "Teste Grátis Agora" },
-  { name: "Mensal", price: "R$ 30", period: "/mês", badge: null, highlight: false, features: ["Todo o catálogo", "Multiplataforma", "Suporte humanizado"], cta: "Assinar Mensal", checkout: "https://mpago.la/2TjzxQE" },
-  { name: "Trimestral", price: "R$ 80", period: "/3 meses", badge: null, highlight: false, features: ["Economia garantida", "Sem reajuste", "Suporte humanizado"], cta: "Assinar Trimestral", checkout: "https://mpago.la/2KCSm28" },
-  { name: "Semestral", price: "R$ 160", period: "/6 meses", badge: null, highlight: false, features: ["Preço reduzido", "Sem reajuste", "Suporte humanizado"], cta: "Assinar Semestral", checkout: "https://mpago.la/14ByT2Z" },
-  { name: "Anual", price: "R$ 290", period: "/ano", badge: "Ganhe 3 meses grátis", highlight: true, features: ["3 meses extras grátis", "Melhor custo-benefício", "Suporte humanizado"], cta: "Assinar Anual", checkout: "https://mpago.la/1VgvDyS" },
+  { name: "Teste Grátis", price: "Grátis", period: "2 horas", badge: "Teste agora", highlight: false, features: ["Acesso completo por 2 horas", "Conheça todo o catálogo", "Canais ao vivo inclusos", "Sem cartão de crédito"], cta: "Quero Testar Grátis" },
+  { name: "Rápido", price: "R$ 5", period: "/4 horas", badge: "Acesso express", highlight: false, features: ["Acesso liberado por 4 horas", "Catálogo completo", "Ideal para um jogo ou filme", "Suporte humanizado"], cta: "Assinar Agora", amount: 5 },
+  { name: "Popular", price: "R$ 8,99", period: "/24 horas", badge: "Mais procurado", highlight: false, features: ["Acesso liberado por 24 horas", "Catálogo completo", "Filmes, séries, animes e doramas", "Suporte humanizado"], cta: "Assinar Agora", amount: 8.99 },
+  { name: "Mensal", price: "R$ 29,99", period: "/mês", badge: "🔥 Melhor oferta", highlight: true, features: ["Mensalidade completa", "+ Canais ao vivo", "+ Canais adultos", "Suporte VIP prioritário"], cta: "Assinar Agora", amount: 29.99 },
+  { name: "Trimestral", price: "R$ 80", period: "/3 meses", badge: null, highlight: false, features: ["Economia garantida", "Sem reajuste", "Suporte humanizado"], cta: "Assinar Trimestral", amount: 80 },
+  { name: "Semestral", price: "R$ 160", period: "/6 meses", badge: null, highlight: false, features: ["Preço reduzido", "Sem reajuste", "Suporte humanizado"], cta: "Assinar Semestral", amount: 160 },
+  { name: "Anual", price: "R$ 290", period: "/ano", badge: "Ganhe 3 meses grátis", highlight: false, features: ["3 meses extras grátis", "Melhor custo-benefício", "Suporte humanizado"], cta: "Assinar Anual", amount: 290 },
 ];
+
+export const rivalServices = [
+  { initials: "N", name: "Netflix", price: "R$ 44,90", value: 44.9 },
+  { initials: "D+", name: "Disney+", price: "R$ 33,90", value: 33.9 },
+  { initials: "▶", name: "Amazon", price: "R$ 19,90", value: 19.9 },
+  { initials: "M", name: "HBO Max", price: "R$ 34,90", value: 34.9 },
+];
+
+export const rivalTotal = "R$ 133,60";
+export const ourMonthly = "R$ 29,99";
+export const savingsLabel = "R$ 100,00";
+
 
 export const trialDevices = [
   { name: "Smart TV (modelo atual)", icon: Tv },
