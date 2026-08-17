@@ -20,10 +20,12 @@ import { SiteHeader } from "@/components/uv/site-header";
 import { CatalogRow, StreamingLogo, catalog, liveBanner, streamings } from "@/components/uv/catalog";
 import { TestimonialSlider } from "@/components/uv/testimonials";
 import { DemoVideo } from "@/components/uv/demo-video";
+import { MegaCatalog } from "@/components/uv/mega-catalog";
 
 import {
   CheckoutDialog,
   PendingProofBanner,
+  PlanComparison,
   TrialDialog,
   WhatsAppIcon,
 } from "@/components/uv/whatsapp";
@@ -429,6 +431,39 @@ function Compatibility() {
   );
 }
 
+function MegaCatalogSection() {
+  return (
+    <section id="titulos" className="section-space px-4 sm:px-6">
+      <div className="mx-auto max-w-7xl">
+        <SectionHeading
+          eyebrow="Catálogo gigante"
+          title={
+            <>
+              Milhares de <span className="text-gradient-brand">títulos</span> esperando por você
+            </>
+          }
+          subtitle="Novelas turcas, lançamentos, séries, ação, comédia, terror, animação e muito mais — tudo atualizado toda semana."
+        />
+        <MegaCatalog
+          cta={
+            <CheckoutDialog
+              planName="Mensal"
+              priceLabel="R$ 29,99/mês"
+              amount={29.99}
+              features={plans[3].features}
+              trigger={
+                <button className="btn-primary-glow ripple px-8 py-4 text-sm uppercase tracking-[0.2em]">
+                  <Zap className="h-4 w-4" /> Assinar e assistir tudo isso
+                </button>
+              }
+            />
+          }
+        />
+      </div>
+    </section>
+  );
+}
+
 function CatalogSection() {
   return (
     <section id="catalogo" className="section-space px-4 sm:px-6">
@@ -541,7 +576,10 @@ function Plans() {
           title="Escolha o plano ideal para você"
           subtitle="Sem fidelidade e sem letra miúda. Pagamento seguro e acesso liberado em minutos."
         />
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+        <Reveal className="mx-auto mt-12 max-w-4xl">
+          <PlanComparison />
+        </Reveal>
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {plans.map((p, i) => {
             const Cta = p.amount ? (
               <CheckoutDialog
