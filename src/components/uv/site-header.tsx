@@ -53,8 +53,8 @@ export function SiteHeader() {
         <div className="flex items-center justify-end gap-2">
           <CheckoutDialog
             planName="Mensal"
-            priceLabel="R$ 30/mês"
-            checkoutUrl="https://mpago.la/2TjzxQE"
+            priceLabel="R$ 29,99/mês"
+            amount={29.99}
             trigger={
               <button className="btn-primary-glow ripple hidden px-5 py-2.5 text-xs uppercase tracking-wider sm:inline-flex">
                 <Zap className="h-4 w-4" /> Começar Agora
@@ -93,8 +93,8 @@ export function SiteHeader() {
             <li className="pt-2">
               <CheckoutDialog
                 planName="Mensal"
-                priceLabel="R$ 30/mês"
-                checkoutUrl="https://mpago.la/2TjzxQE"
+                priceLabel="R$ 29,99/mês"
+                amount={29.99}
                 trigger={
                   <button className="btn-primary-glow w-full text-xs uppercase tracking-wider">
                     <Zap className="h-4 w-4" /> Começar Agora
