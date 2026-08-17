@@ -857,7 +857,9 @@ function LandingPage() {
         <TrustBar />
         <Benefits />
         <HowItWorks />
+        <MegaCatalogSection />
         <CatalogSection />
+
         <Compatibility />
         <Testimonials />
         <Differentials />
