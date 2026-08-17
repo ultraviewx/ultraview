@@ -20,10 +20,12 @@ import { SiteHeader } from "@/components/uv/site-header";
 import { CatalogRow, StreamingLogo, catalog, liveBanner, streamings } from "@/components/uv/catalog";
 import { TestimonialSlider } from "@/components/uv/testimonials";
 import { DemoVideo } from "@/components/uv/demo-video";
+import { MegaCatalog } from "@/components/uv/mega-catalog";
 
 import {
   CheckoutDialog,
   PendingProofBanner,
+  PlanComparison,
   TrialDialog,
   WhatsAppIcon,
 } from "@/components/uv/whatsapp";
@@ -43,7 +45,7 @@ import {
 const SITE_URL = "https://ultraview.lovable.app";
 const TITLE = "Ultra View | Entretenimento premium em qualquer dispositivo";
 const DESCRIPTION =
-  "Ultra View reúne filmes, séries, animes, doramas e canais ao vivo em uma experiência moderna, compatível com Smart TV, celular, TV Box e computador. Planos a partir de R$ 30.";
+  "Ultra View reúne filmes, séries, animes, doramas e canais ao vivo em uma experiência moderna, compatível com Smart TV, celular, TV Box e computador. Planos a partir de R$ 5, com mensalidade de R$ 29,99.";
 
 export const Route = createFileRoute("/")({
   component: LandingPage,
@@ -200,8 +202,8 @@ function Hero() {
             <div className="mt-9 flex flex-wrap gap-3">
               <CheckoutDialog
                 planName="Mensal"
-                priceLabel="R$ 30/mês"
-                checkoutUrl="https://mpago.la/2TjzxQE"
+                priceLabel="R$ 29,99/mês"
+                amount={29.99}
                 trigger={
                   <button className="btn-primary-glow ripple text-sm uppercase tracking-wider">
                     Começar Agora <ArrowRight className="h-4 w-4" />
@@ -217,7 +219,7 @@ function Hero() {
 
           <Reveal from="left" delay={0.32}>
             <p className="mt-6 text-sm text-muted-foreground">
-              Planos a partir de <span className="font-bold text-foreground">R$ 30/mês</span> ·
+              Planos a partir de <span className="font-bold text-foreground">R$ 29,99/mês</span> ·
               ativação em minutos
             </p>
           </Reveal>
@@ -429,6 +431,39 @@ function Compatibility() {
   );
 }
 
+function MegaCatalogSection() {
+  return (
+    <section id="titulos" className="section-space px-4 sm:px-6">
+      <div className="mx-auto max-w-7xl">
+        <SectionHeading
+          eyebrow="Catálogo gigante"
+          title={
+            <>
+              Milhares de <span className="text-gradient-brand">títulos</span> esperando por você
+            </>
+          }
+          subtitle="Novelas turcas, lançamentos, séries, ação, comédia, terror, animação e muito mais — tudo atualizado toda semana."
+        />
+        <MegaCatalog
+          cta={
+            <CheckoutDialog
+              planName="Mensal"
+              priceLabel="R$ 29,99/mês"
+              amount={29.99}
+              features={plans[3].features}
+              trigger={
+                <button className="btn-primary-glow ripple px-8 py-4 text-sm uppercase tracking-[0.2em]">
+                  <Zap className="h-4 w-4" /> Assinar e assistir tudo isso
+                </button>
+              }
+            />
+          }
+        />
+      </div>
+    </section>
+  );
+}
+
 function CatalogSection() {
   return (
     <section id="catalogo" className="section-space px-4 sm:px-6">
@@ -475,7 +510,6 @@ function CatalogSection() {
               subtitle={row.subtitle}
               badge={row.badge}
               banner={row.banner}
-              items={row.items}
             />
           ))}
         </div>
@@ -542,13 +576,17 @@ function Plans() {
           title="Escolha o plano ideal para você"
           subtitle="Sem fidelidade e sem letra miúda. Pagamento seguro e acesso liberado em minutos."
         />
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+        <Reveal className="mx-auto mt-12 max-w-4xl">
+          <PlanComparison />
+        </Reveal>
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {plans.map((p, i) => {
-            const Cta = p.checkout ? (
+            const Cta = p.amount ? (
               <CheckoutDialog
                 planName={p.name}
                 priceLabel={`${p.price}${p.period}`}
-                checkoutUrl={p.checkout}
+                amount={p.amount}
+                features={p.features}
                 trigger={
                   <button
                     className={`ripple w-full text-sm ${p.highlight ? "btn-primary-glow" : "btn-ghost-glass"}`}
@@ -655,8 +693,8 @@ function FinalCta() {
           <div className="relative mt-10 flex flex-wrap justify-center gap-3">
             <CheckoutDialog
               planName="Mensal"
-              priceLabel="R$ 30/mês"
-              checkoutUrl="https://mpago.la/2TjzxQE"
+              priceLabel="R$ 29,99/mês"
+              amount={29.99}
               trigger={
                 <button className="btn-primary-glow ripple uv-pulse-glow px-10 py-4 text-sm uppercase tracking-[0.2em]">
                   <Zap className="h-4 w-4" /> Começar Agora
@@ -819,7 +857,9 @@ function LandingPage() {
         <TrustBar />
         <Benefits />
         <HowItWorks />
+        <MegaCatalogSection />
         <CatalogSection />
+
         <Compatibility />
         <Testimonials />
         <Differentials />

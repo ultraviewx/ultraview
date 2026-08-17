@@ -66,7 +66,7 @@ export const catalog: { key: string; title: string; badge: string; subtitle: str
   {
     key: "filmes",
     title: "Filmes",
-    badge: "+30.000 títulos",
+    badge: "+45.000 filmes esperando por você",
     subtitle: "Dos grandes clássicos aos lançamentos, em alta qualidade.",
     banner: bannerFilmes,
     items: [
@@ -168,36 +168,16 @@ export function StreamingLogo({ s }: { s: Streaming }) {
   );
 }
 
-function PosterCard({ item, category }: { item: Poster; category: string }) {
-  return (
-    <div className="group relative aspect-2/3 w-28 shrink-0 overflow-hidden rounded-2xl border border-border transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/60 hover:shadow-[0_0_40px_-12px_var(--glow-violet)] sm:w-36">
-      <img
-        src={item.img}
-        alt={`${category}: ${item.title} — disponível na Ultra View`}
-        loading="lazy"
-        decoding="async"
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/25 to-transparent" />
-      <h4 className="absolute inset-x-0 bottom-0 p-3 text-xs font-bold leading-tight sm:text-sm">
-        {item.title}
-      </h4>
-    </div>
-  );
-}
-
 export function CatalogRow({
   title,
   subtitle,
   badge,
   banner,
-  items,
 }: {
   title: string;
   subtitle: string;
   badge: string;
   banner: string;
-  items: Poster[];
 }) {
   return (
     <div className="space-y-5">
@@ -224,11 +204,6 @@ export function CatalogRow({
           <p className="mt-1 max-w-md text-sm text-muted-foreground sm:text-base">{subtitle}</p>
         </div>
       </motion.div>
-      <div className="no-scrollbar flex gap-3 overflow-x-auto pb-2 sm:gap-4">
-        {items.map((t) => (
-          <PosterCard key={t.title} item={t} category={title} />
-        ))}
-      </div>
     </div>
   );
 }

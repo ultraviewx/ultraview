@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Check, Zap, X } from "lucide-react";
+import { ArrowRight, Check, Copy, Zap, X } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
 import {
   Dialog,
   DialogContent,
@@ -8,7 +9,17 @@ import {
   DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { PENDING_KEY, trialDevices, waLink } from "@/lib/uv-data";
+import {
+  PENDING_KEY,
+  ourMonthly,
+  rivalServices,
+  rivalTotal,
+  savingsLabel,
+  trialDevices,
+  waLink,
+} from "@/lib/uv-data";
+import { PIX_KEY, PIX_KEY_TYPE, buildPixPayload } from "@/lib/pix";
+
 
 export function WhatsAppIcon({ className = "w-5 h-5" }: { className?: string }) {
   return (
@@ -92,31 +103,106 @@ export function TrialDialog({ trigger }: { trigger: React.ReactNode }) {
   );
 }
 
+export function PlanComparison({ compact = false }: { compact?: boolean }) {
+  return (
+    <div className="glass-card border-primary/25 p-5 sm:p-6">
+      <div className="text-center text-[10px] font-bold uppercase tracking-[0.3em] text-primary">
+        Compare e economize
+      </div>
+      <div className={`mt-5 grid gap-3 ${compact ? "grid-cols-2" : "grid-cols-2 sm:grid-cols-4"}`}>
+        {rivalServices.map((r) => (
+          <div key={r.name} className="rounded-2xl border border-border bg-white/[0.03] p-3 text-center">
+            <div className="mx-auto grid h-8 w-8 place-items-center rounded-lg border border-border text-xs font-extrabold text-muted-foreground">
+              {r.initials}
+            </div>
+            <div className="mt-2 text-xs font-semibold">{r.name}</div>
+            <div className="mt-1 font-display text-sm font-extrabold text-foreground/80 line-through decoration-destructive/70">
+              {r.price}
+            </div>
+            <div className="text-[10px] uppercase tracking-wider text-muted-foreground">por mês</div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-4 grid items-center gap-3 sm:grid-cols-[1fr_auto_1fr]">
+        <div className="rounded-2xl border border-destructive/30 bg-destructive/10 p-4 text-center">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+            Total dos 4 serviços
+          </div>
+          <div className="font-display text-2xl font-extrabold line-through decoration-destructive/70">
+            {rivalTotal}
+          </div>
+          <div className="text-[10px] text-muted-foreground">por mês</div>
+        </div>
+        <div className="text-center text-xs font-bold uppercase tracking-widest text-muted-foreground">
+          vs
+        </div>
+        <div className="rounded-2xl border border-primary/50 bg-primary/12 p-4 text-center shadow-[0_0_50px_-18px_var(--glow-violet)]">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-primary">
+            ⭐ Ultra View
+          </div>
+          <div className="font-display text-2xl font-extrabold text-gradient-brand">{ourMonthly}</div>
+          <div className="text-[10px] text-muted-foreground">/mês</div>
+        </div>
+      </div>
+      <p className="mt-4 rounded-2xl border border-emerald-400/30 bg-emerald-500/10 p-3 text-center text-xs leading-relaxed text-foreground/90">
+        💰 Você economiza mais de <b>{savingsLabel}</b> por mês com o mesmo conteúdo — e ainda leva
+        canais ao vivo.
+      </p>
+    </div>
+  );
+}
+
+const STEPS = ["Plano", "Dados", "Pagamento", "Acesso"];
+
 export function CheckoutDialog({
   trigger,
   planName,
   priceLabel,
-  checkoutUrl,
+  amount,
+  features = [],
 }: {
   trigger: React.ReactNode;
   planName: string;
   priceLabel: string;
-  checkoutUrl: string;
+  amount: number;
+  features?: string[];
 }) {
   const [open, setOpen] = useState(false);
-  const [paid, setPaid] = useState(false);
-  const proofMsg = `Olá! Acabei de realizar o pagamento do plano ${planName} (${priceLabel}) da Ultra View. Segue em anexo o comprovante para liberação do acesso.`;
+  const [step, setStep] = useState(0);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [tab, setTab] = useState<"qr" | "key">("qr");
+  const [copied, setCopied] = useState<string | null>(null);
 
-  const goToCheckout = () => {
+  const payload = buildPixPayload(amount, `ULTRAVIEW ${planName}`);
+
+  const reset = () => {
+    setStep(0);
+    setTab("qr");
+    setCopied(null);
+  };
+
+  const copy = async (value: string, label: string) => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(label);
+      setTimeout(() => setCopied(null), 2200);
+    } catch {
+      /* clipboard indisponível */
+    }
+  };
+
+  const goToPayment = () => {
     try {
       localStorage.setItem(PENDING_KEY, JSON.stringify({ planName, priceLabel, ts: Date.now() }));
       window.dispatchEvent(new Event("ultraview-pending"));
     } catch {
       /* storage indisponível */
     }
-    setPaid(true);
-    window.open(checkoutUrl, "_blank", "noopener,noreferrer");
+    setStep(2);
   };
+
+  const proofMsg = `Olá! Sou ${name || "cliente"} (${phone || "WhatsApp"}). Acabei de pagar o plano ${planName} (${priceLabel}) da Ultra View via PIX. Segue o comprovante para liberar meu acesso.`;
 
   const sendProof = () => {
     try {
@@ -134,75 +220,208 @@ export function CheckoutDialog({
       open={open}
       onOpenChange={(o) => {
         setOpen(o);
-        if (!o) setPaid(false);
+        if (!o) reset();
       }}
     >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className={`${dialogClass} max-w-lg`}>
+      <DialogContent className={`${dialogClass} max-h-[90vh] max-w-lg overflow-y-auto`}>
         <DialogHeader>
-          <DialogTitle className="text-2xl text-gradient-brand">
-            Plano {planName} • {priceLabel}
-          </DialogTitle>
+          <DialogTitle className="text-2xl text-gradient-brand">Assinar plano {planName}</DialogTitle>
           <DialogDescription className="text-muted-foreground">
-            {paid
-              ? "Depois de pagar, toque no botão verde para nos enviar o comprovante."
-              : "Siga os 2 passos abaixo para liberar seu acesso rapidamente."}
+            Plano {planName} — {priceLabel}. Siga as 4 etapas para liberar seu acesso.
           </DialogDescription>
         </DialogHeader>
-        <ol className="mt-2 space-y-3 text-sm text-foreground/90">
-          <li
-            className={`flex gap-3 rounded-2xl border p-3 ${paid ? "border-border/40 bg-white/[0.02] opacity-60" : "border-primary/25 bg-primary/10"}`}
-          >
-            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground">
-              {paid ? <Check className="h-4 w-4" /> : "1"}
-            </span>
-            <span>
-              Clique em <b>“Ir para o checkout”</b> e finalize o pagamento com segurança.
-            </span>
-          </li>
-          <li
-            className={`flex gap-3 rounded-2xl border p-3 ${paid ? "border-emerald-400/60 bg-emerald-500/15 shadow-[0_0_30px_-8px_rgba(16,185,129,0.8)]" : "border-emerald-400/20 bg-emerald-500/5"}`}
-          >
-            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-500 font-bold text-white">
-              2
-            </span>
-            <span>
-              Após pagar, clique em <b>“Enviar comprovante”</b> e anexe o print. Liberamos seu
-              acesso em poucos minutos.
-            </span>
-          </li>
+
+        <ol className="mt-1 grid grid-cols-4 gap-1.5">
+          {STEPS.map((s, i) => (
+            <li key={s} className="text-center">
+              <div
+                className={`h-1 rounded-full transition-colors ${i <= step ? "bg-primary" : "bg-border"}`}
+              />
+              <span
+                className={`mt-1.5 block text-[9px] font-bold uppercase tracking-wider ${i <= step ? "text-primary" : "text-muted-foreground"}`}
+              >
+                {s}
+              </span>
+            </li>
+          ))}
         </ol>
-        <div className="mt-4 flex flex-col gap-2">
-          {!paid && (
-            <button onClick={goToCheckout} className="btn-primary-glow w-full">
-              <Zap className="h-4 w-4" /> Ir para o checkout
+
+        {step === 0 && (
+          <div className="mt-3 space-y-4">
+            <div className="glass-card border-primary/40 p-5">
+              <h3 className="font-display text-lg font-bold">Plano {planName}</h3>
+              <p className="mt-1 font-display text-3xl font-extrabold text-gradient-brand">
+                {priceLabel}
+              </p>
+              <ul className="mt-4 space-y-2">
+                {features.map((f) => (
+                  <li key={f} className="flex gap-2 text-sm text-muted-foreground">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <PlanComparison compact />
+            <button onClick={() => setStep(1)} className="btn-primary-glow w-full">
+              Continuar <ArrowRight className="h-4 w-4" />
             </button>
-          )}
-          <button
-            type="button"
-            onClick={sendProof}
-            className={`btn-whatsapp w-full ${paid ? "ring-2 ring-emerald-300/70" : ""}`}
-          >
-            <WhatsAppIcon className="h-4 w-4" />
-            {paid ? "Já paguei — Enviar comprovante agora" : "Já paguei — Enviar comprovante"}
-          </button>
-          {paid && (
-            <button
-              type="button"
-              onClick={goToCheckout}
-              className="text-xs text-muted-foreground underline underline-offset-4 hover:text-primary"
-            >
-              Reabrir página de pagamento
+            <p className="text-center text-xs text-muted-foreground">
+              Ambiente seguro • Cancele quando quiser
+            </p>
+          </div>
+        )}
+
+        {step === 1 && (
+          <div className="mt-3 space-y-4">
+            <label className="block text-left">
+              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Seu nome
+              </span>
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Como podemos te chamar?"
+                className="mt-1.5 w-full rounded-xl border border-border bg-white/[0.04] px-4 py-3 text-sm outline-none transition-colors focus:border-primary/70"
+              />
+            </label>
+            <label className="block text-left">
+              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Seu WhatsApp (com DDD)
+              </span>
+              <input
+                value={phone}
+                inputMode="tel"
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="(85) 99999-9999"
+                className="mt-1.5 w-full rounded-xl border border-border bg-white/[0.04] px-4 py-3 text-sm outline-none transition-colors focus:border-primary/70"
+              />
+            </label>
+            <p className="text-xs text-muted-foreground">
+              Vamos liberar seu acesso por este número após o pagamento.
+            </p>
+            <div className="flex flex-wrap justify-center gap-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+              <span className="rounded-full border border-border px-3 py-1">100% seguro</span>
+              <span className="rounded-full border border-border px-3 py-1">PIX na hora</span>
+              <span className="rounded-full border border-border px-3 py-1">Suporte 7 dias</span>
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => setStep(0)} className="btn-ghost-glass flex-1 text-sm">
+                Voltar
+              </button>
+              <button onClick={goToPayment} className="btn-primary-glow flex-[2] text-sm">
+                <Zap className="h-4 w-4" /> Gerar PIX
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div className="mt-3 space-y-4">
+            <div className="text-center">
+              <div className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary">
+                Pague com PIX
+              </div>
+              <div className="mt-1 font-display text-2xl font-extrabold">{priceLabel}</div>
+            </div>
+            <div className="grid grid-cols-2 gap-1 rounded-xl border border-border p-1">
+              {(["qr", "key"] as const).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setTab(t)}
+                  className={`rounded-lg py-2 text-xs font-bold transition-colors ${
+                    tab === t ? "bg-primary text-primary-foreground" : "text-muted-foreground"
+                  }`}
+                >
+                  {t === "qr" ? "QR Code" : "Chave PIX"}
+                </button>
+              ))}
+            </div>
+
+            {tab === "qr" ? (
+              <div className="flex flex-col items-center gap-3">
+                <div className="rounded-2xl bg-white p-3">
+                  <QRCodeSVG value={payload} size={190} level="M" />
+                </div>
+                <button
+                  onClick={() => copy(payload, "code")}
+                  className="btn-ghost-glass w-full text-xs"
+                >
+                  <Copy className="h-4 w-4" />
+                  {copied === "code" ? "Código PIX copiado!" : "Copiar código PIX (copia e cola)"}
+                </button>
+              </div>
+            ) : (
+              <div className="rounded-2xl border border-primary/30 bg-primary/10 p-4 text-center">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                  Chave PIX ({PIX_KEY_TYPE})
+                </div>
+                <div className="mt-1 break-all font-display text-base font-extrabold">{PIX_KEY}</div>
+                <button
+                  onClick={() => copy(PIX_KEY, "key")}
+                  className="btn-primary-glow mt-3 w-full text-xs"
+                >
+                  <Copy className="h-4 w-4" />
+                  {copied === "key" ? "Chave copiada!" : "Copiar chave PIX"}
+                </button>
+              </div>
+            )}
+
+            <div className="rounded-2xl border border-border bg-white/[0.03] p-4 text-left">
+              <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Como pagar:
+              </div>
+              <ol className="mt-2 list-decimal space-y-1 pl-4 text-xs leading-relaxed text-muted-foreground">
+                {tab === "qr" ? (
+                  <>
+                    <li>Abra o app do seu banco e escolha PIX &gt; Ler QR Code.</li>
+                    <li>Confirme o valor de {priceLabel.split("/")[0]}.</li>
+                  </>
+                ) : (
+                  <>
+                    <li>Abra o app do seu banco e escolha PIX &gt; Pagar com chave.</li>
+                    <li>Selecione o tipo {PIX_KEY_TYPE} e cole a chave acima.</li>
+                    <li>Digite o valor de {priceLabel.split("/")[0]} e confirme.</li>
+                  </>
+                )}
+                <li>Depois de pagar, toque em “Já paguei” abaixo.</li>
+              </ol>
+            </div>
+
+            <div className="flex gap-2">
+              <button onClick={() => setStep(1)} className="btn-ghost-glass flex-1 text-sm">
+                Voltar
+              </button>
+              <button onClick={() => setStep(3)} className="btn-primary-glow flex-[2] text-sm">
+                <Check className="h-4 w-4" /> Já paguei
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === 3 && (
+          <div className="mt-3 space-y-4 text-center">
+            <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl border border-emerald-400/40 bg-emerald-500/15 text-emerald-300">
+              <Check className="h-7 w-7" />
+            </div>
+            <h3 className="font-display text-xl font-bold">Pagamento realizado?</h3>
+            <p className="text-sm text-muted-foreground">
+              Toque abaixo para enviar o comprovante no WhatsApp e liberar seu acesso em minutos.
+            </p>
+            <button onClick={sendProof} className="btn-whatsapp w-full">
+              <WhatsAppIcon className="h-4 w-4" /> Chamar no WhatsApp
             </button>
-          )}
-        </div>
-        <p className="mt-2 text-center text-xs text-muted-foreground">
-          Atendimento humanizado • Liberação rápida
-        </p>
+            <p className="text-xs text-muted-foreground">
+              Envie o comprovante e nossa equipe libera seu acesso imediatamente.
+            </p>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
 }
+
 
 type PendingPayment = { planName: string; priceLabel: string; ts: number };
 
