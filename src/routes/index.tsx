@@ -475,7 +475,6 @@ function CatalogSection() {
               subtitle={row.subtitle}
               badge={row.badge}
               banner={row.banner}
-              items={row.items}
             />
           ))}
         </div>
