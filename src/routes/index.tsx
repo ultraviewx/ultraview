@@ -43,7 +43,7 @@ import {
 const SITE_URL = "https://ultraview.lovable.app";
 const TITLE = "Ultra View | Entretenimento premium em qualquer dispositivo";
 const DESCRIPTION =
-  "Ultra View reúne filmes, séries, animes, doramas e canais ao vivo em uma experiência moderna, compatível com Smart TV, celular, TV Box e computador. Planos a partir de R$ 30.";
+  "Ultra View reúne filmes, séries, animes, doramas e canais ao vivo em uma experiência moderna, compatível com Smart TV, celular, TV Box e computador. Planos a partir de R$ 5, com mensalidade de R$ 29,99.";
 
 export const Route = createFileRoute("/")({
   component: LandingPage,
@@ -200,8 +200,8 @@ function Hero() {
             <div className="mt-9 flex flex-wrap gap-3">
               <CheckoutDialog
                 planName="Mensal"
-                priceLabel="R$ 30/mês"
-                checkoutUrl="https://mpago.la/2TjzxQE"
+                priceLabel="R$ 29,99/mês"
+                amount={29.99}
                 trigger={
                   <button className="btn-primary-glow ripple text-sm uppercase tracking-wider">
                     Começar Agora <ArrowRight className="h-4 w-4" />
@@ -217,7 +217,7 @@ function Hero() {
 
           <Reveal from="left" delay={0.32}>
             <p className="mt-6 text-sm text-muted-foreground">
-              Planos a partir de <span className="font-bold text-foreground">R$ 30/mês</span> ·
+              Planos a partir de <span className="font-bold text-foreground">R$ 29,99/mês</span> ·
               ativação em minutos
             </p>
           </Reveal>
@@ -544,11 +544,12 @@ function Plans() {
         />
         <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
           {plans.map((p, i) => {
-            const Cta = p.checkout ? (
+            const Cta = p.amount ? (
               <CheckoutDialog
                 planName={p.name}
                 priceLabel={`${p.price}${p.period}`}
-                checkoutUrl={p.checkout}
+                amount={p.amount}
+                features={p.features}
                 trigger={
                   <button
                     className={`ripple w-full text-sm ${p.highlight ? "btn-primary-glow" : "btn-ghost-glass"}`}
@@ -655,8 +656,8 @@ function FinalCta() {
           <div className="relative mt-10 flex flex-wrap justify-center gap-3">
             <CheckoutDialog
               planName="Mensal"
-              priceLabel="R$ 30/mês"
-              checkoutUrl="https://mpago.la/2TjzxQE"
+              priceLabel="R$ 29,99/mês"
+              amount={29.99}
               trigger={
                 <button className="btn-primary-glow ripple uv-pulse-glow px-10 py-4 text-sm uppercase tracking-[0.2em]">
                   <Zap className="h-4 w-4" /> Começar Agora
