@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Check, Zap, X } from "lucide-react";
+import { ArrowRight, Check, Copy, Zap, X } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
 import {
   Dialog,
   DialogContent,
@@ -8,7 +9,17 @@ import {
   DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { PENDING_KEY, trialDevices, waLink } from "@/lib/uv-data";
+import {
+  PENDING_KEY,
+  ourMonthly,
+  rivalServices,
+  rivalTotal,
+  savingsLabel,
+  trialDevices,
+  waLink,
+} from "@/lib/uv-data";
+import { PIX_KEY, PIX_KEY_TYPE, buildPixPayload } from "@/lib/pix";
+
 
 export function WhatsAppIcon({ className = "w-5 h-5" }: { className?: string }) {
   return (
