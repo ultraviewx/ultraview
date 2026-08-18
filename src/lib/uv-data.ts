@@ -98,7 +98,7 @@ export const testimonials = [
   { name: "Juliana Freitas", city: "Recife, PE", text: "A qualidade da imagem me surpreendeu e a interface é muito fácil de usar. Já indiquei para a família toda." },
   { name: "Marcos Vinícius", city: "São Paulo, SP", text: "Uso no celular e no notebook. Funciona redondo nos dois e o acesso foi liberado no mesmo dia." },
   { name: "Patrícia Gomes", city: "Belo Horizonte, MG", text: "O que mais gostei foi o atendimento. Respondem rápido, com paciência e explicam tudo direitinho." },
-  { name: "Anderson Lima", city: "Curitiba, PR", text: "Assino há meses e nunca tive problema. Vale muito o custo-benefício do plano anual." },
+  { name: "Anderson Lima", city: "Curitiba, PR", text: "Assino há meses e nunca tive problema. Vale muito o custo-benefício do plano mensal." },
   { name: "Camila Rocha", city: "Salvador, BA", text: "Minha TV é antiga e mesmo assim funcionou perfeitamente. Me ajudaram a configurar do zero." },
 ];
 
@@ -119,9 +119,6 @@ export const plans: Plan[] = [
   { name: "Rápido", price: "R$ 5", period: "/4 horas", badge: "Acesso express", highlight: false, features: ["Acesso liberado por 4 horas", "Catálogo completo", "Ideal para um jogo ou filme", "Suporte humanizado"], cta: "Assinar Agora", amount: 5 },
   { name: "Popular", price: "R$ 8,99", period: "/24 horas", badge: "Mais procurado", highlight: false, features: ["Acesso liberado por 24 horas", "Catálogo completo", "Filmes, séries, animes e doramas", "Suporte humanizado"], cta: "Assinar Agora", amount: 8.99 },
   { name: "Mensal", price: "R$ 29,99", period: "/mês", badge: "🔥 Melhor oferta", highlight: true, features: ["Mensalidade completa", "+ Canais ao vivo", "+ Canais adultos", "Suporte VIP prioritário"], cta: "Assinar Agora", amount: 29.99 },
-  { name: "Trimestral", price: "R$ 80", period: "/3 meses", badge: null, highlight: false, features: ["Economia garantida", "Sem reajuste", "Suporte humanizado"], cta: "Assinar Trimestral", amount: 80 },
-  { name: "Semestral", price: "R$ 160", period: "/6 meses", badge: null, highlight: false, features: ["Preço reduzido", "Sem reajuste", "Suporte humanizado"], cta: "Assinar Semestral", amount: 160 },
-  { name: "Anual", price: "R$ 290", period: "/ano", badge: "Ganhe 3 meses grátis", highlight: false, features: ["3 meses extras grátis", "Melhor custo-benefício", "Suporte humanizado"], cta: "Assinar Anual", amount: 290 },
 ];
 
 export const rivalServices = [
