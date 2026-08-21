@@ -856,10 +856,9 @@ function LandingPage() {
         <Hero />
         <TrustBar />
         <Benefits />
-        <HowItWorks />
         <MegaCatalogSection />
+        <HowItWorks />
         <CatalogSection />
-
         <Compatibility />
         <Testimonials />
         <Differentials />
