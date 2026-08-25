@@ -39,6 +39,8 @@ function sanitize(value: string, max: number) {
 
 /** Gera o código PIX "copia e cola" (BR Code) para um valor em reais. */
 export function buildPixPayload(amount: number, reference = "ULTRAVIEW") {
+  const official = PIX_QR_BY_AMOUNT[amount.toFixed(2)];
+  if (official) return official;
   const merchantAccount = tag("00", "BR.GOV.BCB.PIX") + tag("01", PIX_KEY);
   const payload =
     tag("00", "01") +
