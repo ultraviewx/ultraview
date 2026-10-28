@@ -110,15 +110,27 @@ export type Plan = {
   highlight: boolean;
   features: string[];
   cta: string;
-  /** Valor em reais para gerar o PIX. Ausente = teste grátis (WhatsApp). */
+  /** Valor em reais. Ausente = teste grátis (WhatsApp). */
   amount?: number;
+  checkoutUrl?: string;
 };
+
+export type PaidPlan = Plan & { amount: number; checkoutUrl: string };
+
+export const monthlyPlan: PaidPlan = { name: "Mensal", price: "R$ 29,99", period: "/mês", badge: "🔥 Melhor oferta", highlight: true, features: ["Acesso completo por 1 mês", "+ Canais ao vivo", "+ Canais adultos", "Suporte VIP prioritário"], cta: "Assinar Agora", amount: 29.99, checkoutUrl: "https://pay.kiwify.com.br/rCHmvXF" };
+
+export const paidPlans: PaidPlan[] = [
+  monthlyPlan,
+  { name: "Trimestral", price: "R$ 80", period: "/3 meses", badge: null, highlight: false, features: ["Acesso completo por 3 meses", "+ Canais ao vivo", "+ Canais adultos", "Suporte VIP prioritário"], cta: "Assinar Agora", amount: 80, checkoutUrl: "https://pay.kiwify.com.br/62flL8k" },
+  { name: "Semestral", price: "R$ 160", period: "/6 meses", badge: null, highlight: false, features: ["Acesso completo por 6 meses", "+ Canais ao vivo", "+ Canais adultos", "Suporte VIP prioritário"], cta: "Assinar Agora", amount: 160, checkoutUrl: "https://pay.kiwify.com.br/1EJFGP2" },
+];
+
+export const mostExpensivePlan = paidPlans.reduce((highest, plan) =>
+  plan.amount > highest.amount ? plan : highest, monthlyPlan);
 
 export const plans: Plan[] = [
   { name: "Teste Grátis", price: "Grátis", period: "2 horas", badge: "Teste agora", highlight: false, features: ["Acesso completo por 2 horas", "Conheça todo o catálogo", "Canais ao vivo inclusos", "Sem cartão de crédito"], cta: "Quero Testar Grátis" },
-  { name: "Rápido", price: "R$ 5", period: "/4 horas", badge: "Acesso express", highlight: false, features: ["Acesso liberado por 4 horas", "Catálogo completo", "Ideal para um jogo ou filme", "Suporte humanizado"], cta: "Assinar Agora", amount: 5 },
-  { name: "Popular", price: "R$ 8,99", period: "/24 horas", badge: "Mais procurado", highlight: false, features: ["Acesso liberado por 24 horas", "Catálogo completo", "Filmes, séries, animes e doramas", "Suporte humanizado"], cta: "Assinar Agora", amount: 8.99 },
-  { name: "Mensal", price: "R$ 29,99", period: "/mês", badge: "🔥 Melhor oferta", highlight: true, features: ["Mensalidade completa", "+ Canais ao vivo", "+ Canais adultos", "Suporte VIP prioritário"], cta: "Assinar Agora", amount: 29.99 },
+  ...paidPlans,
 ];
 
 export const rivalServices = [
