@@ -21,9 +21,9 @@ import { CatalogRow, StreamingLogo, catalog, liveBanner, streamings } from "@/co
 import { TestimonialSlider } from "@/components/uv/testimonials";
 import { DemoVideo } from "@/components/uv/demo-video";
 import { MegaCatalog } from "@/components/uv/mega-catalog";
+import { CheckoutLink } from "@/components/uv/checkout-link";
 
 import {
-  CheckoutDialog,
   PendingProofBanner,
   PlanComparison,
   TrialDialog,
@@ -38,6 +38,8 @@ import {
   differentials,
   faq,
   plans,
+  monthlyPlan,
+  mostExpensivePlan,
   steps,
   trustItems,
 } from "@/lib/uv-data";
@@ -45,7 +47,7 @@ import {
 const SITE_URL = "https://ultraview.lovable.app";
 const TITLE = "Ultra View | Entretenimento premium em qualquer dispositivo";
 const DESCRIPTION =
-  "Ultra View reúne filmes, séries, animes, doramas e canais ao vivo em uma experiência moderna, compatível com Smart TV, celular, TV Box e computador. Planos a partir de R$ 5, com mensalidade de R$ 29,99.";
+  "Ultra View reúne filmes, séries, animes, doramas e canais ao vivo em uma experiência moderna, compatível com Smart TV, celular, TV Box e computador. Planos mensais, trimestrais e semestrais, a partir de R$ 29,99.";
 
 export const Route = createFileRoute("/")({
   component: LandingPage,
@@ -200,16 +202,9 @@ function Hero() {
 
           <Reveal from="left" delay={0.24}>
             <div className="mt-9 flex flex-wrap gap-3">
-              <CheckoutDialog
-                planName="Mensal"
-                priceLabel="R$ 29,99/mês"
-                amount={29.99}
-                trigger={
-                  <button className="btn-primary-glow ripple text-sm uppercase tracking-wider">
+              <CheckoutLink plan={mostExpensivePlan} className="btn-primary-glow ripple text-sm uppercase tracking-wider">
                     Começar Agora <ArrowRight className="h-4 w-4" />
-                  </button>
-                }
-              />
+                  </CheckoutLink>
               <a href="#como-funciona" className="btn-ghost-glass text-sm uppercase tracking-wider">
                 <PlayCircle className="h-4 w-4" /> Ver Demonstração
               </a>
@@ -446,17 +441,9 @@ function MegaCatalogSection() {
         />
         <MegaCatalog
           cta={
-            <CheckoutDialog
-              planName="Mensal"
-              priceLabel="R$ 29,99/mês"
-              amount={29.99}
-              features={plans[3].features}
-              trigger={
-                <button className="btn-primary-glow ripple px-8 py-4 text-sm uppercase tracking-[0.2em]">
-                  <Zap className="h-4 w-4" /> Assinar e assistir tudo isso
-                </button>
-              }
-            />
+            <CheckoutLink plan={monthlyPlan} className="btn-primary-glow ripple px-8 py-4 text-sm uppercase tracking-[0.2em]">
+                    <Zap className="h-4 w-4" /> Assinar e assistir tudo isso
+                  </CheckoutLink>
           }
         />
       </div>
@@ -581,20 +568,13 @@ function Plans() {
         </Reveal>
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {plans.map((p, i) => {
-            const Cta = p.amount ? (
-              <CheckoutDialog
-                planName={p.name}
-                priceLabel={`${p.price}${p.period}`}
-                amount={p.amount}
-                features={p.features}
-                trigger={
-                  <button
-                    className={`ripple w-full text-sm ${p.highlight ? "btn-primary-glow" : "btn-ghost-glass"}`}
-                  >
-                    {p.cta}
-                  </button>
-                }
-              />
+            const Cta = p.checkoutUrl ? (
+              <CheckoutLink
+                plan={p}
+                className={`ripple w-full text-sm ${p.highlight ? "btn-primary-glow" : "btn-ghost-glass"}`}
+              >
+                {p.cta}
+              </CheckoutLink>
             ) : (
               <TrialDialog
                 trigger={
@@ -691,16 +671,9 @@ function FinalCta() {
             aparelhos — com suporte humano em cada passo.
           </p>
           <div className="relative mt-10 flex flex-wrap justify-center gap-3">
-            <CheckoutDialog
-              planName="Mensal"
-              priceLabel="R$ 29,99/mês"
-              amount={29.99}
-              trigger={
-                <button className="btn-primary-glow ripple uv-pulse-glow px-10 py-4 text-sm uppercase tracking-[0.2em]">
-                  <Zap className="h-4 w-4" /> Começar Agora
-                </button>
-              }
-            />
+            <CheckoutLink plan={mostExpensivePlan} className="btn-primary-glow ripple uv-pulse-glow px-10 py-4 text-sm uppercase tracking-[0.2em]">
+                    <Zap className="h-4 w-4" /> Começar Agora
+                  </CheckoutLink>
             <TrialDialog
               trigger={
                 <button className="btn-ghost-glass px-8 py-4 text-sm uppercase tracking-[0.2em]">

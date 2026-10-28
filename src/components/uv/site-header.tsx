@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Menu, X, Zap } from "lucide-react";
 import logo from "@/assets/ultraview-logo.jpg";
-import { navLinks } from "@/lib/uv-data";
-import { CheckoutDialog } from "@/components/uv/whatsapp";
+import { navLinks, mostExpensivePlan } from "@/lib/uv-data";
+import { CheckoutLink } from "@/components/uv/checkout-link";
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
@@ -51,16 +51,9 @@ export function SiteHeader() {
         </ul>
 
         <div className="flex items-center justify-end gap-2">
-          <CheckoutDialog
-            planName="Mensal"
-            priceLabel="R$ 29,99/mês"
-            amount={29.99}
-            trigger={
-              <button className="btn-primary-glow ripple hidden px-5 py-2.5 text-xs uppercase tracking-wider sm:inline-flex">
+          <CheckoutLink plan={mostExpensivePlan} className="btn-primary-glow ripple hidden px-5 py-2.5 text-xs uppercase tracking-wider sm:inline-flex">
                 <Zap className="h-4 w-4" /> Começar Agora
-              </button>
-            }
-          />
+              </CheckoutLink>
           <button
             type="button"
             aria-label={open ? "Fechar menu" : "Abrir menu"}
@@ -91,16 +84,9 @@ export function SiteHeader() {
               </li>
             ))}
             <li className="pt-2">
-              <CheckoutDialog
-                planName="Mensal"
-                priceLabel="R$ 29,99/mês"
-                amount={29.99}
-                trigger={
-                  <button className="btn-primary-glow w-full text-xs uppercase tracking-wider">
-                    <Zap className="h-4 w-4" /> Começar Agora
-                  </button>
-                }
-              />
+              <CheckoutLink plan={mostExpensivePlan} className="btn-primary-glow w-full text-xs uppercase tracking-wider">
+                <Zap className="h-4 w-4" /> Começar Agora
+              </CheckoutLink>
             </li>
           </ul>
         </motion.div>
