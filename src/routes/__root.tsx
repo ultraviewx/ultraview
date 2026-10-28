@@ -6,6 +6,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  type ErrorComponentProps,
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
@@ -37,7 +38,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
 
@@ -89,8 +90,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: SITE_TITLE },
       { name: "twitter:description", content: SITE_DESCRIPTION },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/REIWjIBTI1Un59w1mUo4jGOP8E22/social-images/social-1779788612340-photo_2026-05-26_11-32-06.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/REIWjIBTI1Un59w1mUo4jGOP8E22/social-images/social-1779788612340-photo_2026-05-26_11-32-06.webp" },
     ],
     scripts: [
       {
